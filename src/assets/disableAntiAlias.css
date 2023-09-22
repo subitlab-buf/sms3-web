@@ -1,0 +1,3 @@
+.noaa{
+    image-rendering: crisp-edges; /* Doesn't work on WebKit */
+}
