@@ -1,15 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import NormalSidebar from './components/NormalSidebar';
+import '@arco-design/web-react/dist/css/arco.css'
 
-const root = ReactDOM.createRoot(
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <NormalSidebar/>,
+    errorElement: <Navigate to='/'/>
+  }
+])
+
+ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
-);
-root.render(
+).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}/>
   </React.StrictMode>
 );
 
