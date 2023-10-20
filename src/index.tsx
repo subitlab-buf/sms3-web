@@ -1,10 +1,10 @@
+import '@arco-design/web-react/dist/css/arco.css'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import NormalSidebar from './components/NormalSidebar';
-import '@arco-design/web-react/dist/css/arco.css'
 
 const router = createBrowserRouter([
   {
