@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import {Navigate, RouterProvider, createBrowserRouter, Routes, Route} from 'react-router-dom';
 import NormalSidebar from './components/NormalSidebar';
 
-import Login from './Templates/Login'
+import Login from './views/Login'
 
 const router = createBrowserRouter([
   {

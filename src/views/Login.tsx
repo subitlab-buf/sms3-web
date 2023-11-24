@@ -1,4 +1,4 @@
-import '../Styles/Login.css';
+import '../styles/Login.css';
 import SubITLogo from '../assets/subit.svg';
 import { useState, useEffect, useReducer, createContext } from 'react';
 import { Layout, Menu, Breadcrumb, Button, Message, Carousel, Input, Space} from '@arco-design/web-react';

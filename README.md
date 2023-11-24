@@ -6,6 +6,10 @@ Using sms3rs as backend.
 
 In the project directory, you can run:
 
+### `npm i`
+
+Install the dependencies.
+
 ### `npm start`
 
 Runs the app in the development mode.\
