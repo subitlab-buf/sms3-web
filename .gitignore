@@ -27,3 +27,5 @@ package-lock.json
 .VSCodeCounter
 
 .idea
+.eslintrc.js
+src/Styles/Login.css

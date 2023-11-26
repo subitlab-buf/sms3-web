@@ -1,5 +1,6 @@
-import "../styles/Login.css";
+import "../Styles/Login.css";
 import SubITLogo from "../assets/subit.svg";
+import {useEffect, useState} from "react";
 import { Button, Carousel, Input, Space } from "@arco-design/web-react";
 import {
 	IconUser,
@@ -16,9 +17,36 @@ const imageSrc = [
 	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/24e0dd27418d2291b65db1b21aa62254.png~tplv-uwbnlip3yd-webp.webp",
 ];
 
-function Login() {
+function Login()
+{
+	const changeScale = () => {
+
+		document.body.style.transformOrigin = "left top";
+		//修改缩放中心
+		if(window.innerWidth < 300){
+			document.body.style.scale = String(0.25);
+		}else{
+			document.body.style.scale = String(((window.innerWidth - 16) / 1200));
+		}
+		//修改屏幕缩放,但是控制缩放范围
+	};
+
+	changeScale();
+
+	useEffect(() => {
+		// 添加事件监听器
+		window.addEventListener("resize", changeScale);
+
+		// 在组件卸载时清理事件监听器
+		return () => {
+			window.removeEventListener("resize", changeScale);
+		};
+	}, []);
+
+
 	return (
-		<div className={"container1"}>
+		<div className={"container1"} >
+
 			<div className={"frame1"}>
 				<div style={{ width: 572, height: 350, float: "left" }}>
 					<Carousel
@@ -39,12 +67,12 @@ function Login() {
 				<div className={"login-panel"}>
 					<div
 						style={{
-							width: 185,
 							height: 59,
 							background: "white",
 							justifyContent: "center",
 							alignItems: "center",
 							display: "inline-flex",
+							flexDirection:"row"
 						}}>
 						<div
 							style={{
@@ -75,10 +103,10 @@ function Login() {
 								fontFamily: "PingFang SC",
 								wordWrap: "break-word",
 							}}>
-              大屏管理系统
+							大屏管理系统
 						</div>
 					</div>
-					<div style={{ marginTop: 32, gap: 32 }}>
+					<div>
 						<Space direction={"vertical"} size={15}>
 							<Space>
 								<Input
@@ -110,40 +138,53 @@ function Login() {
 										width: 220,
 										borderRadius: 5,
 									}}>
-                  登录
-								</Button>
-							</Space>
-							<Space>
-								<Button
-									type={"text"}
-									style={{
-										width: 92,
-										height: 20,
-										fontSize: 12,
-										float: "right",
-									}}>
-									<IconSwap />
-                  忘记密码
-								</Button>
-								<Button
-									type={"text"}
-									style={{
-										width: 92,
-										height: 20,
-										marginLeft: 5,
-										fontSize: 12,
-										float: "right",
-									}}>
-									<IconSwap />
-                  管理员登录
+									登录
 								</Button>
 							</Space>
 						</Space>
 					</div>
 				</div>
+				<Space style={{float:"left",marginLeft:671,marginTop: -75}}>
+					<Button
+						type={"text"}
+						style={{
+							width: 96,
+							height: 24,
+							fontSize: 12,
+							fontWeight:400,
+							float: "right",
+						}}>
+						<IconSwap fontSize={12}/>
+						忘记密码
+					</Button>
+					<Button
+						type={"text"}
+						style={{
+							width: 104,
+							height: 24,
+							marginLeft: 5,
+							fontSize: 12,
+							fontWeight:400, alignItems: "center",
+						}}>
+						<IconSwap fontSize={12}/>
+						管理员登录
+					</Button>
+				</Space>
+			</div>
+
+			<div style={{width:128,height:22,marginTop:0,marginLeft:"auto",marginRight:"auto",marginBottom:15}}>
+				<p style={{color: "#1D2129",
+					fontSize: 14,
+					fontFamily:" PingFang SC",
+					fontWeight: 400,
+					wordWrap: "break-word",
+					textAlign:"center"}}>
+					powered by SubIT
+				</p>
 			</div>
 		</div>
 	);
+
 }
 
 export default Login;
