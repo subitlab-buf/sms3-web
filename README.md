@@ -40,4 +40,4 @@ The description is too long.
 
 **Note: check your code and fix the warnings using this before you push!**
 
-Lint your code using eslint.
+Lint your code using eslint and stylelint.
