@@ -1,65 +1,65 @@
 .container1 {
-  background-color: #F5F6FA;
+	background-color: #F5F6FA;
 }
 
 .frame1 {
-  width: 989px;
-  height: 427px;
-  margin-top: 186px;
-  margin-left: 105px;
-  background: #FFF;
-  border-radius: 20px;
-  box-shadow: 0 2px 5px 0 #0000001A;
+	width: 989px;
+	height: 427px;
+	margin-top: 186px;
+	margin-left: 105px;
+	background: #FFF;
+	border-radius: 20px;
+	box-shadow: 0 2px 5px 0 #0000001A;
 
 }
 
 .carousel {
-  top: 39px;
-  left: 34px;
-  float: none;
-  width: 572px;
-  height: 350px;
+	top: 39px;
+	left: 34px;
+	float: none;
+	width: 572px;
+	height: 350px;
 }
 
 .login-panel {
-  top: 55px;
-  left: 649px;
-  gap: 32px;
-  float: right;
-  width: 220px;
-  height: 237px;
-  padding: 27px 22px;
-  margin: 55px 76px 91px 43px;
-  background: #FFF;
-  border-radius: 15px;
-  box-shadow: 0 2px 5px 0 #0000001A;
+	top: 55px;
+	left: 649px;
+	gap: 32px;
+	float: right;
+	width: 220px;
+	height: 237px;
+	padding: 27px 22px;
+	margin: 55px 76px 91px 43px;
+	background: #FFF;
+	border-radius: 15px;
+	box-shadow: 0 2px 5px 0 #0000001A;
 }
 
 .title1 {
-  width: 185px;
-  height: 59px;
-  margin-top: 27px;
-  margin-left: 39.5px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24;
-  color: #1D2129;
-  word-wrap: break-word;
+	width: 185px;
+	height: 59px;
+	margin-top: 27px;
+	margin-left: 39.5px;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 24;
+	color: #1D2129;
+	word-wrap: break-word;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .spin {
-    animation: spin-animation infinite 20s linear;
-  }
+	.spin {
+		animation: spin-animation infinite 20s linear;
+	}
 }
 
 @keyframes spin-animation {
-  from {
-    transform: rotate(0deg);
-  }
+	from {
+		transform: rotate(0deg);
+	}
 
-  to {
-    transform: rotate(360deg);
-  }
+	to {
+		transform: rotate(360deg);
+	}
 }
