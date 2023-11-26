@@ -1,30 +1,29 @@
-import '@arco-design/web-react/dist/css/arco.css'
-import React from 'react';
+import "@arco-design/web-react/dist/css/arco.css";
+import React from "react";
 
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import {Navigate, RouterProvider, createBrowserRouter, Routes, Route} from 'react-router-dom';
-import NormalSidebar from './components/NormalSidebar';
-
-import Login from './views/Login'
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import {
+	Navigate,
+	RouterProvider,
+	createBrowserRouter,
+} from "react-router-dom";
+import Login from "./views/Login";
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Login/>,
-    errorElement: <Navigate to='/'/>
-  }
-])
+	{
+		path: "/",
+		element: <Login />,
+		errorElement: <Navigate to="/" />,
+	},
+]);
 
-ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-).render(
-  <React.StrictMode>
-    <RouterProvider router={router}/>
-  </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+	<React.StrictMode>
+		<RouterProvider router={router} />
+	</React.StrictMode>,
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
