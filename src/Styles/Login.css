@@ -1,28 +1,12 @@
-@media screen {
-    html{
-        transform-origin: left top;
-    }
-}
-
-:root{width: 1200px}
-
-
 .container1 {
-    box-sizing: border-box;
-    display: inline-flex;
-    flex-direction: column;
-    gap: 150px;
-    align-items: center;
-    justify-content: flex-end;
-    width: 1200px;
-    height: 800px;
-    padding: 186px 105px 15px;
     background-color: #F5F6FA;
 }
 
-.frame1{
+.frame1 {
     width: 989px;
     height: 427px;
+    margin-top: 186px;
+    margin-left: 105px;
     background: #FFF;
     border-radius: 20px;
     box-shadow: 0 2px 5px 0 #0000001A;
@@ -40,11 +24,7 @@
 .login-panel {
     top: 55px;
     left: 649px;
-    display: inline-flex;
-    flex-direction: column;
     gap: 32px;
-    align-items: center;
-    justify-content: center;
     float: right;
     width: 220px;
     height: 237px;

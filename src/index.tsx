@@ -1,24 +1,28 @@
 import "@arco-design/web-react/dist/css/arco.css";
-import React,{useEffect} from "react";
+import React from "react";
 
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import {Navigate, RouterProvider, createBrowserRouter,} from "react-router-dom";
+import {
+    Navigate,
+    RouterProvider,
+    createBrowserRouter,
+} from "react-router-dom";
 import Login from "./views/Login";
 
 const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <Login />,
-		errorElement: <Navigate to="/" />,
-	},
+    {
+        path: "/",
+        element: <Login />,
+        errorElement: <Navigate to="/" />,
+    },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-	<React.StrictMode>
-		<RouterProvider router={router} />
-	</React.StrictMode>,
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function
