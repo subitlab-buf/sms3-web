@@ -1,4 +1,4 @@
-import "../Styles/Login.css";
+import "../styles/Login.css";
 import SubITLogo from "../assets/subit.svg";
 import {useEffect, useState} from "react";
 import { Button, Carousel, Input, Space } from "@arco-design/web-react";
@@ -19,19 +19,14 @@ const imageSrc = [
 
 function Login()
 {
+	const [frameScale, setFrameScale] = useState(window.innerWidth < 300 ? 0.25 : ((window.screen.availWidth - 16) / 1200));
 	const changeScale = () => {
-
-		document.body.style.transformOrigin = "left top";
-		//修改缩放中心
 		if(window.innerWidth < 300){
-			document.body.style.scale = String(0.25);
+			setFrameScale(0.25);
 		}else{
-			document.body.style.scale = String(((window.innerWidth - 16) / 1200));
+			setFrameScale(((window.screen.availWidth - 16) / 1200));
 		}
-		//修改屏幕缩放,但是控制缩放范围
 	};
-
-	changeScale();
 
 	useEffect(() => {
 		// 添加事件监听器
@@ -45,9 +40,9 @@ function Login()
 
 
 	return (
-		<div className={"container1"} >
+		<div className={"container1"} style={{height: 800*frameScale, gap: 150*frameScale }}>
 
-			<div className={"frame1"}>
+			<div className={"frame1"} style={{transform: `scale(${frameScale})`,}} >
 				<div style={{ width: 572, height: 350, float: "left" }}>
 					<Carousel
 						indicatorType={"dot"}
