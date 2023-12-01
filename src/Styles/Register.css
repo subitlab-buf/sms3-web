@@ -1,6 +1,7 @@
 
 
 .container1 {
+    position: relative;
     box-sizing: border-box;
     display: inline-flex;
     flex-direction: column;
@@ -11,43 +12,39 @@
     background-color: #F5F6FA;
 }
 
-.frame1 {
-    width: 989px;
-    height: 427px;
+.frame2{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 1009px;
+    height: 536px;
     margin-right: auto;
     margin-left: auto;
+    overflow: hidden;
     background: #FFF;
     border-radius: 20px;
     box-shadow: 0 2px 5px 0 #0000001A;
-    transform-origin: center bottom;
+    transform-origin: center bottom;;
 }
 
-.carousel {
-    top: 39px;
-    left: 34px;
-    float: none;
-    width: 572px;
-    height: 350px;
-}
-
-.login-panel {
-    top: 55px;
-    left: 649px;
-    display: inline-flex;
+.registerPanel{
+    position:absolute;
+    display: flex;
     flex-direction: column;
     gap: 32px;
     align-items: center;
     justify-content: center;
-    float: right;
-    width: 220px;
-    height: 237px;
+    width: 540px;
+    height: 357px;
     padding: 27px 22px;
-    margin: 55px 76px 91px 43px;
     overflow: hidden;
-    background: #FFF;
+    background: white;
     border-radius: 15px;
-    box-shadow: 0 2px 5px 0 #0000001A;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+
 }
+
 
 .title1 {
     width: 185px;
@@ -60,20 +57,4 @@
     line-height: 24;
     color: #1D2129;
     word-wrap: break-word;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .spin {
-        animation: spin-animation infinite 20s linear;
-    }
-}
-
-@keyframes spin-animation {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
 }

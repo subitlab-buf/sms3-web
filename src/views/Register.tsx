@@ -1,7 +1,8 @@
-import "../styles/Login.css";
+import "../Styles/Register.css";
 import SubITLogo from "../assets/subit.svg";
 import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space } from "@arco-design/web-react";
+import { Button, Input, Space, Message} from "@arco-design/web-react";
+import { useNavigate } from "react-router-dom";
 import {
 	IconUser,
 	IconInfoCircle,
@@ -17,8 +18,12 @@ const imageSrc = [
 	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/24e0dd27418d2291b65db1b21aa62254.png~tplv-uwbnlip3yd-webp.webp",
 ];
 
+
+
+
 function Login()
 {
+	//scale控制模块
 	const [frameScale, setFrameScale] = useState(window.innerWidth < 300 ? 0.25 : ((window.screen.availWidth - 16) / 1200));
 	const changeScale = () => {
 		if(window.innerWidth < 300){
@@ -26,6 +31,8 @@ function Login()
 		}else{
 			setFrameScale(((window.screen.availWidth - 16) / 1200));
 		}
+		//调整frame1的缩放（也会调整container1的width和gap）
+		//有最小宽度限制为300px，若屏幕宽度低于此则不会继续缩小
 	};
 
 	useEffect(() => {
@@ -39,27 +46,64 @@ function Login()
 	}, []);
 
 
+	//Input模块
+	const  navigate = useNavigate();
+	const[username, setUsername] = useState("");
+	const[college, setCollege] = useState("");
+	const[password, setPassword] = useState("");
+	const[confirm, setConfirm] = useState("");
+
+	function handleChangeUserName(e:any){
+		let username = e.target.value;
+		setUsername(username);
+	}
+	//获取并更新username
+
+	function handleChangeCollege(e:any){
+		try {
+			let userClg = e.target.value;
+			setCollege(userClg);
+		}catch (error){
+			console.log(error);
+		}
+	}
+	//获取并更新username
+
+	function handleChangePassword(e:any){
+		let userPass = e.target.value;
+		setPassword(userPass);
+	}
+	//获取并更新password
+
+	function handleChangeConfirm(e:any){
+		let userConf = e.target.value;
+		setConfirm(userConf);
+	}
+	//获取并更新确认的password
+
+	//handleSubIT（雾
+	function handleSubmit(e:any){
+		if (username.length <= 20 && password.length <= 20 && username.length >0 && password.length>0){
+			//发送用户名与密码
+			console.log(`
+			username:${username}
+			password:${password}`);
+
+		}else {
+			console.log("username or password is illegal");
+			Message.error("用户名或密码长度过长");
+		}
+	}
+
+
 	return (
 		<div className={"container1"} style={{height: 800*frameScale, gap: 150*frameScale }}>
 
-			<div className={"frame1"} style={{transform: `scale(${frameScale})`,}} >
-				<div style={{ width: 572, height: 350, float: "left" }}>
-					<Carousel
-						indicatorType={"dot"}
-						indicatorPosition={"right"}
-						showArrow="never"
-						autoPlay={true}
-						className={"carousel"}
-						style={{ clear: "none" }}>
-						{imageSrc.map((src, index) => (
-							<div key={index}>
-								<img src={src} style={{ width: "100%", height: "100%" }} />
-							</div>
-						))}
-					</Carousel>
+			<div className={"frame2"} style={{transform: `scale(${frameScale})`,}} >
+				<div style={{width: 860, height:430, backgroundImage: "url(https://via.placeholder.com/860x430)", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", display: "inline-flex"}}>
+					<div style={{alignSelf:" 'stretch'", height: 0, transform: "rotate(-30deg)", transformOrigin: "0 0", border: "1px solid"}} />
 				</div>
-
-				<div className={"login-panel"}>
+				<div className={"registerPanel"}>
 					<div
 						style={{
 							height: 59,
@@ -101,71 +145,33 @@ function Login()
 							大屏管理系统
 						</div>
 					</div>
-					<div>
-						<Space direction={"vertical"} size={15}>
-							<Space>
-								<Input
-									style={{ width: 220, borderRadius: 5 }}
-									prefix={<IconUser />}
-									suffix={<IconInfoCircle />}
-									placeholder="请输入用户名"
-									maxLength={{ length: 20, errorOnly: true }}
-								/>
-							</Space>
-							<Space>
-								<Input.Password
-									style={{ width: 220, borderRadius: 5 }}
-									suffix={<IconInfoCircle />}
-									placeholder="请输入密码"
-									maxLength={{ length: 20, errorOnly: true }}
-								/>
-							</Space>
-							<Space style={{ marginTop: 10 }}>
-								<Button
-									type={"primary"}
-									size={"large"}
-									style={{
-										paddingTop: 5,
-										paddingBottom: 5,
-										paddingLeft: 16,
-										paddingRight: 16,
-										fontSize: 14,
-										width: 220,
-										borderRadius: 5,
-									}}>
-									登录
-								</Button>
-							</Space>
+					<div style={{borderWidth:1, borderColor: "black"}}>
+						<Space size={16} direction={"vertical"}>
+							<Input></Input>
+							<Input></Input>
+							<Input></Input>
+							<Button
+								type={"primary"}
+								size={"large"}
+								style={{
+									paddingTop: 5,
+									paddingBottom: 5,
+									paddingLeft: 16,
+									paddingRight: 16,
+									fontSize: 14,
+									width: 220,
+									borderRadius: 5,
+								}}
+								onClick={handleSubmit}
+							>
+								注册
+							</Button>
 						</Space>
 					</div>
 				</div>
-				<Space style={{float:"left",marginLeft:671,marginTop: -75}}>
-					<Button
-						type={"text"}
-						style={{
-							width: 96,
-							height: 24,
-							fontSize: 12,
-							fontWeight:400,
-							float: "right",
-						}}>
-						<IconSwap fontSize={12}/>
-						忘记密码
-					</Button>
-					<Button
-						type={"text"}
-						style={{
-							width: 104,
-							height: 24,
-							marginLeft: 5,
-							fontSize: 12,
-							fontWeight:400, alignItems: "center",
-						}}>
-						<IconSwap fontSize={12}/>
-						管理员登录
-					</Button>
-				</Space>
 			</div>
+
+
 
 			<div style={{width:128,height:22,marginTop:0,marginLeft:"auto",marginRight:"auto",marginBottom:15}}>
 				<p style={{color: "#1D2129",
@@ -177,6 +183,8 @@ function Login()
 					powered by SubIT
 				</p>
 			</div>
+
+
 		</div>
 	);
 
