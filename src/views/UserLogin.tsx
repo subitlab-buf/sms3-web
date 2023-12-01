@@ -1,7 +1,8 @@
-import "../styles/Login.css";
+import "../Styles/Login.css";
 import SubITLogo from "../assets/subit.svg";
 import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space } from "@arco-design/web-react";
+import { Button, Carousel, Input, Space, Message} from "@arco-design/web-react";
+import { useNavigate } from "react-router-dom";
 import {
 	IconUser,
 	IconInfoCircle,
@@ -19,6 +20,7 @@ const imageSrc = [
 
 function Login()
 {
+	//scale控制模块
 	const [frameScale, setFrameScale] = useState(window.innerWidth < 300 ? 0.25 : ((window.screen.availWidth - 16) / 1200));
 	const changeScale = () => {
 		if(window.innerWidth < 300){
@@ -26,6 +28,8 @@ function Login()
 		}else{
 			setFrameScale(((window.screen.availWidth - 16) / 1200));
 		}
+		//调整frame1的缩放（也会调整container1的width和gap）
+		//有最小宽度限制为300px，若屏幕宽度低于此则不会继续缩小
 	};
 
 	useEffect(() => {
@@ -37,6 +41,46 @@ function Login()
 			window.removeEventListener("resize", changeScale);
 		};
 	}, []);
+
+
+	//Input模块
+	const  navigate = useNavigate();
+	const[username, setUsername] = useState("");
+	const[password, setPassword] = useState("");
+
+	function handleChangeUserName(e:any){
+		let username = e.target.value;
+		setUsername(username);
+	}
+	//获取并更新username
+	function handleChangePassword(e:any){
+		let userPass = e.target.value;
+		setPassword(userPass);
+	}
+	//获取并更新password
+
+	//handleSubIT（雾
+	function handleSubmit(e:any){
+		if(username.length >0 && password.length>0){
+			//首先判断是否为空
+			if (username.length <= 20 && password.length <= 20 ){
+				//发送用户名与密码
+				console.log(`
+			username:${username}
+			password:${password}`);
+				navigate("/mainpage");
+			}else {
+				Message.error("用户名或密码长度过长");
+			}
+		}else {
+			if(username.length > 0){
+				Message.error("请输入密码");
+			}
+			else {
+				Message.error("请输入用户名");
+			}
+		}
+	}
 
 
 	return (
@@ -110,14 +154,20 @@ function Login()
 									suffix={<IconInfoCircle />}
 									placeholder="请输入用户名"
 									maxLength={{ length: 20, errorOnly: true }}
+									value={username}
+									onChange={(value: string, e) => handleChangeUserName(e)}
+									onPressEnter={e => handleChangeUserName(e)}
+
 								/>
 							</Space>
 							<Space>
 								<Input.Password
 									style={{ width: 220, borderRadius: 5 }}
-									suffix={<IconInfoCircle />}
 									placeholder="请输入密码"
 									maxLength={{ length: 20, errorOnly: true }}
+									value={password}
+									onChange={(value: string, e) => handleChangePassword(e)}
+									onPressEnter={e => handleChangePassword(e)}
 								/>
 							</Space>
 							<Space style={{ marginTop: 10 }}>
@@ -132,7 +182,9 @@ function Login()
 										fontSize: 14,
 										width: 220,
 										borderRadius: 5,
-									}}>
+									}}
+									onClick={handleSubmit}
+								>
 									登录
 								</Button>
 							</Space>
@@ -160,7 +212,9 @@ function Login()
 							marginLeft: 5,
 							fontSize: 12,
 							fontWeight:400, alignItems: "center",
-						}}>
+						}}
+						onClick={() => {navigate("/administratorlogin");}}
+					>
 						<IconSwap fontSize={12}/>
 						管理员登录
 					</Button>
