@@ -1,12 +1,6 @@
-import "../Styles/Login.css";
-import SubITLogo from "../assets/subit.svg";
+import "../styles/Login.css";
 import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space, Message} from "@arco-design/web-react";
-import {
-	IconUser,
-	IconInfoCircle,
-	IconSwap,
-} from "@arco-design/web-react/icon";
+import { Message} from "@arco-design/web-react";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 
