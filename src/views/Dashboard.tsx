@@ -1,15 +1,8 @@
 import "../styles/Login.css";
 import {useEffect, useState} from "react";
-import { Message} from "@arco-design/web-react";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 
-const imageSrc = [
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6480dbc69be1b5de95010289787d64f1.png~tplv-uwbnlip3yd-webp.webp",
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/0265a04fddbd77a19602a15d9d55d797.png~tplv-uwbnlip3yd-webp.webp",
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/24e0dd27418d2291b65db1b21aa62254.png~tplv-uwbnlip3yd-webp.webp",
-];
 
 function Login()
 {
@@ -34,38 +27,6 @@ function Login()
 			window.removeEventListener("resize", changeScale);
 		};
 	}, []);
-
-
-	//Input模块
-	const[username, setUsername] = useState("");
-	const[password, setPassword] = useState("");
-
-	function handleChangeUserName(e:any){
-		let username = e.target.value;
-		setUsername(username);
-	}
-	//获取并更新username
-	function handleChangePassword(e:any){
-		let userPass = e.target.value;
-		setPassword(userPass);
-	}
-	//获取并更新password
-
-	//handleSubIT（雾
-	function handleSubmit(e:any){
-		if (username.length <= 20 && password.length <= 20 && username.length >0 && password.length>0){
-			//发送用户名与密码
-			console.log(`
-			username:${username}
-			password:${password}`);
-
-		}else {
-			console.log("username or password is illegal");
-			Message.error("用户名或密码长度过长");
-		}
-	}
-
-
 	return (
 		<div className={"container1"} style={{height: 800*frameScale, gap: 97*frameScale }}>
 
