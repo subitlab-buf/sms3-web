@@ -1,7 +1,7 @@
-import "../Styles/Login.css";
-import "../components/Logo";
+import "../styles/Login.css";
+import SubITLogo from "../assets/subit.svg";
 import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space, Message, Layout} from "@arco-design/web-react";
+import { Button, Carousel, Input, Space, Message} from "@arco-design/web-react";
 import { useNavigate } from "react-router-dom";
 import {
 	IconUser,
@@ -10,12 +10,6 @@ import {
 } from "@arco-design/web-react/icon";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
-import Logo from "../components/Logo";
-
-const Sider = Layout.Sider;
-const Header = Layout.Header;
-const Footer = Layout.Footer;
-const Content = Layout.Content;
 
 const imageSrc = [
 	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
@@ -54,12 +48,12 @@ function Login()
 	const[username, setUsername] = useState("");
 	const[password, setPassword] = useState("");
 
-	function handleSetUserName(e:any){
+	function handleChangeUserName(e:any){
 		let username = e.target.value;
 		setUsername(username);
 	}
 	//获取并更新username
-	function handleSetPassword(e:any){
+	function handleChangePassword(e:any){
 		let userPass = e.target.value;
 		setPassword(userPass);
 	}
@@ -74,8 +68,7 @@ function Login()
 				console.log(`
 			username:${username}
 			password:${password}`);
-				navigate("/dashboard");
-				//TODO:发送用户登录信息，设置cookie
+				navigate("/mainpage");
 			}else {
 				Message.error("用户名或密码长度过长");
 			}
@@ -91,39 +84,9 @@ function Login()
 
 
 	return (
-		<Layout className={"container1"} style={{height: window.innerHeight, gap: 150 }}>
+		<div className={"container1"} style={{height: 800*frameScale, gap: 150*frameScale }}>
 
 			<div className={"frame1"} style={{transform: `scale(${frameScale})`,}} >
-
-				<Space style={{position:"absolute",marginLeft:676.5, marginTop: 363}} size={30}>
-					<Button
-						type={"text"}
-						style={{
-							width: 92,
-							height: 24,
-							fontSize: 12,
-							fontWeight:400, alignItems: "center",
-						}}
-						onClick={() => {navigate("/register");}}
-					>
-						<IconSwap fontSize={12}/>
-						注册账户
-					</Button>
-
-					<Button
-						type={"text"}
-						style={{
-							width: 92,
-							height: 24,
-							fontSize: 12,
-							fontWeight:400,
-							float: "right",
-						}}>
-						<IconSwap fontSize={12}/>
-						忘记密码
-					</Button>
-				</Space>
-
 				<div style={{ width: 572, height: 350, float: "left" }}>
 					<Carousel
 						indicatorType={"dot"}
@@ -141,7 +104,47 @@ function Login()
 				</div>
 
 				<div className={"login-panel"}>
-					<Logo/>
+					<div
+						style={{
+							height: 59,
+							background: "white",
+							justifyContent: "center",
+							alignItems: "center",
+							display: "inline-flex",
+							flexDirection:"row"
+						}}>
+						<div
+							style={{
+								height: 35,
+								paddingTop: 3,
+								paddingBottom: 3,
+								paddingRight: 3,
+								flexDirection: "column",
+								justifyContent: "center",
+								alignItems: "center",
+								gap: 10,
+								display: "inline-flex",
+							}}>
+							<img
+								style={{
+									width: 60,
+									height: 30,
+									background: "linear-gradient(0deg, 0%, 100%)",
+								}}
+								src={SubITLogo}
+							/>
+						</div>
+						<div
+							style={{
+								color: "#1D2129",
+								fontSize: 16,
+								fontWeight: 500,
+								fontFamily: "PingFang SC",
+								wordWrap: "break-word",
+							}}>
+							大屏管理系统
+						</div>
+					</div>
 					<div>
 						<Space direction={"vertical"} size={15}>
 							<Space>
@@ -152,8 +155,8 @@ function Login()
 									placeholder="请输入用户名"
 									maxLength={{ length: 20, errorOnly: true }}
 									value={username}
-									onChange={(value: string, e) => handleSetUserName(e)}
-									onPressEnter={e => handleSetUserName(e)}
+									onChange={(value: string, e) => handleChangeUserName(e)}
+									onPressEnter={e => handleChangeUserName(e)}
 
 								/>
 							</Space>
@@ -163,8 +166,8 @@ function Login()
 									placeholder="请输入密码"
 									maxLength={{ length: 20, errorOnly: true }}
 									value={password}
-									onChange={(value: string, e) => handleSetPassword(e)}
-									onPressEnter={e => handleSetPassword(e)}
+									onChange={(value: string, e) => handleChangePassword(e)}
+									onPressEnter={e => handleChangePassword(e)}
 								/>
 							</Space>
 							<Space style={{ marginTop: 10 }}>
@@ -188,6 +191,34 @@ function Login()
 						</Space>
 					</div>
 				</div>
+				<Space style={{float:"left",marginLeft:671,marginTop: -75}}>
+					<Button
+						type={"text"}
+						style={{
+							width: 96,
+							height: 24,
+							fontSize: 12,
+							fontWeight:400,
+							float: "right",
+						}}>
+						<IconSwap fontSize={12}/>
+						忘记密码
+					</Button>
+					<Button
+						type={"text"}
+						style={{
+							width: 104,
+							height: 24,
+							marginLeft: 5,
+							fontSize: 12,
+							fontWeight:400, alignItems: "center",
+						}}
+						onClick={() => {navigate("/administratorlogin");}}
+					>
+						<IconSwap fontSize={12}/>
+						管理员登录
+					</Button>
+				</Space>
 			</div>
 
 			<div style={{width:128,height:22,marginTop:0,marginLeft:"auto",marginRight:"auto",marginBottom:15}}>
@@ -200,7 +231,7 @@ function Login()
 					powered by SubIT
 				</p>
 			</div>
-		</Layout>
+		</div>
 	);
 
 }
