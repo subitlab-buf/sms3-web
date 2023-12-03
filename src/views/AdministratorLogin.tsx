@@ -1,5 +1,5 @@
 import "../Styles/Login.css";
-import SubITLogo from "../assets/subit.svg";
+import "../components/Logo";
 import {useEffect, useState} from "react";
 import { Button, Carousel, Input, Space, Message} from "@arco-design/web-react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import {
 } from "@arco-design/web-react/icon";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
+import Logo from "../components/Logo";
 
 const imageSrc = [
 	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
@@ -68,7 +69,7 @@ function Login()
 				console.log(`
 			username:${username}
 			password:${password}`);
-				navigate("/mainpage");
+				navigate("/administrator");
 			}else {
 				Message.error("用户名或密码长度过长");
 			}
@@ -104,47 +105,7 @@ function Login()
 				</div>
 
 				<div className={"login-panel"}>
-					<div
-						style={{
-							height: 59,
-							background: "white",
-							justifyContent: "center",
-							alignItems: "center",
-							display: "inline-flex",
-							flexDirection:"row"
-						}}>
-						<div
-							style={{
-								height: 35,
-								paddingTop: 3,
-								paddingBottom: 3,
-								paddingRight: 3,
-								flexDirection: "column",
-								justifyContent: "center",
-								alignItems: "center",
-								gap: 10,
-								display: "inline-flex",
-							}}>
-							<img
-								style={{
-									width: 60,
-									height: 30,
-									background: "linear-gradient(0deg, 0%, 100%)",
-								}}
-								src={SubITLogo}
-							/>
-						</div>
-						<div
-							style={{
-								color: "#1D2129",
-								fontSize: 16,
-								fontWeight: 500,
-								fontFamily: "PingFang SC",
-								wordWrap: "break-word",
-							}}>
-							大屏管理系统
-						</div>
-					</div>
+					<Logo/>
 					<div>
 						<Space direction={"vertical"} size={15}>
 							<Space>
@@ -198,8 +159,9 @@ function Login()
 						fontWeight: 400,
 						wordWrap: "break-word",
 						height:20,
-						width:84,
-						paddingTop:1
+						width:79,
+						paddingTop:1,
+						paddingLeft:5
 					}}>
 						不是管理员？
 					</div>

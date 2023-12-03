@@ -30,7 +30,7 @@
 
 .registerPanel{
     position:absolute;
-    display: flex;
+    display:inline-flex;
     flex-direction: column;
     gap: 32px;
     align-items: center;
@@ -42,9 +42,50 @@
     background: white;
     border-radius: 15px;
     box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-
 }
 
+.panelInside{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 240px;
+}
+
+.panel-1{
+    translate: 0px;
+}
+
+.panel-2{
+    animation: toPanel2 0.5s;
+    translate: -500px;
+}
+
+.panel-3{
+    animation: toPanel3 0.5s;
+    translate: -1000px;
+}
+
+@keyframes toPanel2{
+    from{
+        translate: 0px;
+    }
+
+    to{
+        translate: -500px;
+    }
+}
+
+@keyframes toPanel3{
+    from{
+        translate: -500px;
+    }
+
+    to{
+        translate: -1000px;
+    }
+}
 
 .title1 {
     width: 185px;

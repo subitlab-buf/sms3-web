@@ -1,33 +1,29 @@
 
 
-.container1 {
-    box-sizing: border-box;
+.container2 {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    height: 800px;
+    height: 100%;
     background-color: #F5F6FA;
 }
 
-.frame1 {
-    width: 989px;
-    height: 427px;
-    margin-right: auto;
-    margin-left: auto;
-    background: #FFF;
-    border-radius: 20px;
-    box-shadow: 0 2px 5px 0 #0000001A;
-    transform-origin: center bottom;
+.menu{
+    width:233px;
+    height:768px;
+    padding-top:32px;
 }
 
-.carousel {
-    top: 39px;
-    left: 34px;
-    float: none;
-    width: 572px;
-    height: 350px;
+.menuBtn{
+    width: 180px;
+    height: 22px;
+    font-family: "PingFang SC";
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+    word-wrap: break-word;
 }
 
 .login-panel {

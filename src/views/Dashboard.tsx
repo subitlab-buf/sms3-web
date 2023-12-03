@@ -1,14 +1,25 @@
-import "../Styles/Login.css";
-import SubITLogo from "../assets/subit.svg";
+import "../Styles/Dashboard.css";
+import "../components/Logo";
 import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space, Message} from "@arco-design/web-react";
+import { Button, Carousel, Input, Space, Message, Menu, Layout, Breadcrumb} from "@arco-design/web-react";
 import {
 	IconUser,
 	IconInfoCircle,
 	IconSwap,
+	IconDashboard,
+	IconShareExternal,
+	IconHistory,
 } from "@arco-design/web-react/icon";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
+import Logo from "../components/Logo";
+
+const MenuItem = Menu.Item;
+const SubMenu = Menu.SubMenu;
+const Sider = Layout.Sider;
+const Header = Layout.Header;
+const Footer = Layout.Footer;
+const Content = Layout.Content;
 
 const imageSrc = [
 	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
@@ -46,38 +57,27 @@ function Login()
 	const[username, setUsername] = useState("");
 	const[password, setPassword] = useState("");
 
-	function handleChangeUserName(e:any){
-		let username = e.target.value;
-		setUsername(username);
-	}
-	//获取并更新username
-	function handleChangePassword(e:any){
-		let userPass = e.target.value;
-		setPassword(userPass);
-	}
-	//获取并更新password
-
-	//handleSubIT（雾
-	function handleSubmit(e:any){
-		if (username.length <= 20 && password.length <= 20 && username.length >0 && password.length>0){
-			//发送用户名与密码
-			console.log(`
-			username:${username}
-			password:${password}`);
-
-		}else {
-			console.log("username or password is illegal");
-			Message.error("用户名或密码长度过长");
-		}
-	}
-
 
 	return (
-		<div className={"container1"} style={{height: 800*frameScale, gap: 97*frameScale }}>
-
-			<div className={"frame1"} style={{transform: `scale(${frameScale})`,}} >
-
-			</div>
+		<div className='container2'	>
+			<Menu mode={"vertical"}  defaultSelectedKeys={["1"]} className={"menu"}>
+				<Space direction={"vertical"} size={24}>
+					<MenuItem key={"0"} style={{width:"100%",
+						display:"inline-flex",
+						flexDirection:"column",
+						alignItems:"center",
+						justifyContent:"center",
+						overflow:"hidden",
+						backgroundColor: "rgba(0,0,0,0%)"
+					}}><Logo/></MenuItem>
+					<Space size={0} direction={"vertical"}>
+						<MenuItem key='1' className={"menuBtn"}><IconDashboard fontSize={12}/>工作台</MenuItem>
+						<MenuItem key='2' className={"menuBtn"}><IconShareExternal fontSize={12}/>立即投稿</MenuItem>
+						<MenuItem key='3' className={"menuBtn"}><IconHistory fontSize={12}/>历史投稿</MenuItem>
+						<MenuItem key='4' className={"menuBtn"}><IconUser fontSize={12}/>用户信息</MenuItem>
+					</Space>
+				</Space>
+			</Menu>
 		</div>
 	);
 
