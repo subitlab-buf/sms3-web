@@ -28,7 +28,7 @@
     transform-origin: center bottom;;
 }
 
-.registerPanel{
+.register-panel{
     position:absolute;
     display: flex;
     flex-direction: column;

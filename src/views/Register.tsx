@@ -33,9 +33,12 @@ function Login() {
 
 
 	//Input模块
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [username, setUsername] = useState("");
 	const [college, setCollege] = useState("");
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [password, setPassword] = useState("");
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [confirm, setConfirm] = useState("");
 
 	//获取并更新username
@@ -49,7 +52,7 @@ function Login() {
 	//handleSubIT（雾
 	function handleSubmit(e: any) {
 		if (username.length <= 20 && password.length <= 20 && username.length > 0 && password.length > 0) {
-			//发送用户名与密码
+			// TODO: 发送用户名与密码
 			console.log(`
 			username:${username}
 			password:${password}`);

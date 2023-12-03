@@ -1,7 +1,7 @@
 import "../styles/Login.css";
 import SubITLogo from "../assets/subit.svg";
-import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space, Message} from "@arco-design/web-react";
+import {useState} from "react";
+import { Button, Carousel, Input, Space, Message, Grid, Layout} from "@arco-design/web-react";
 import { useNavigate } from "react-router-dom";
 import {
 	IconUser,
@@ -20,28 +20,6 @@ const imageSrc = [
 
 function Login()
 {
-	//scale控制模块
-	const [frameScale, setFrameScale] = useState(window.innerWidth < 300 ? 0.25 : ((window.screen.availWidth - 16) / 1200));
-	const changeScale = () => {
-		if(window.innerWidth < 300){
-			setFrameScale(0.25);
-		}else{
-			setFrameScale(((window.screen.availWidth - 16) / 1200));
-		}
-		//调整frame1的缩放（也会调整container1的width和gap）
-		//有最小宽度限制为300px，若屏幕宽度低于此则不会继续缩小
-	};
-
-	useEffect(() => {
-		// 添加事件监听器
-		window.addEventListener("resize", changeScale);
-
-		// 在组件卸载时清理事件监听器
-		return () => {
-			window.removeEventListener("resize", changeScale);
-		};
-	}, []);
-
 
 	//Input模块
 	const  navigate = useNavigate();
@@ -60,7 +38,7 @@ function Login()
 	//获取并更新password
 
 	//handleSubIT（雾
-	function handleSubmit(e:any){
+	function handleSubmit(_e:any){
 		if(username.length >0 && password.length>0){
 			//首先判断是否为空
 			if (username.length <= 20 && password.length <= 20 ){
@@ -84,154 +62,102 @@ function Login()
 
 
 	return (
-		<div className={"container1"} style={{height: 800*frameScale, gap: 150*frameScale }}>
+		<Layout style={{height:"100vh", backgroundColor: "var(--color-fill-2)"}}>
+			<Layout.Content>
+				<Grid.Row style={{height:"100%"}}>
+					<Grid.Col span={4}/>
+					<Grid.Col span={16} style={{height:"100%"}}>
+						<div className={"main-frame"}>
+							<Grid.Row>
+								<Grid.Col span={10}>
+									<Carousel
+										indicatorType={"dot"}
+										indicatorPosition={"right"}
+										showArrow="never"
+										autoPlay={true}
+									>
+										{imageSrc.map((src, index) => (
+											<div key={index}>
+												<img src={src} style={{ width: "100%", height: "100%" }} alt=""/>
+											</div>
+										))}
+									</Carousel>
+								</Grid.Col>
+								<Grid.Col span={14}>
+									<Space align="center">
+										<img
+											style={{
+												width: 60,
+												height: 30,
+												paddingTop: 6
+											}}
+											src={SubITLogo}
+											alt=""
+										/>
+										<div
+											style={{
+												fontSize: "large",
+												fontWeight: "bold",
+											}}>
+										大屏管理系统
+										</div>
+									</Space>
+									<Space direction={"vertical"}>
+										<Input
+											prefix={<IconUser />}
+											suffix={<IconInfoCircle />}
+											placeholder="请输入用户名"
+											value={username}
+											onChange={(_value: string, e) => handleChangeUserName(e)}
+											onPressEnter={e => handleChangeUserName(e)}
 
-			<div className={"frame1"} style={{transform: `scale(${frameScale})`,}} >
-				<div style={{ width: 572, height: 350, float: "left" }}>
-					<Carousel
-						indicatorType={"dot"}
-						indicatorPosition={"right"}
-						showArrow="never"
-						autoPlay={true}
-						className={"carousel"}
-						style={{ clear: "none" }}>
-						{imageSrc.map((src, index) => (
-							<div key={index}>
-								<img src={src} style={{ width: "100%", height: "100%" }} />
-							</div>
-						))}
-					</Carousel>
-				</div>
-
-				<div className={"login-panel"}>
-					<div
-						style={{
-							height: 59,
-							background: "white",
-							justifyContent: "center",
-							alignItems: "center",
-							display: "inline-flex",
-							flexDirection:"row"
-						}}>
-						<div
-							style={{
-								height: 35,
-								paddingTop: 3,
-								paddingBottom: 3,
-								paddingRight: 3,
-								flexDirection: "column",
-								justifyContent: "center",
-								alignItems: "center",
-								gap: 10,
-								display: "inline-flex",
-							}}>
-							<img
-								style={{
-									width: 60,
-									height: 30,
-									background: "linear-gradient(0deg, 0%, 100%)",
-								}}
-								src={SubITLogo}
-							/>
+										/>
+										<Input.Password
+											placeholder="请输入密码"
+											value={password}
+											onChange={(_value: string, e) => handleChangePassword(e)}
+											onPressEnter={e => handleChangePassword(e)}
+										/>
+										<Button
+											type={"primary"}
+											size={"large"}
+											onClick={handleSubmit}
+										>
+												登录
+										</Button>
+									</Space>
+									<Space>
+										<Button
+											type={"text"}
+										>
+											<IconSwap fontSize={12}/>
+										忘记密码
+										</Button>
+										<Button
+											type={"text"}
+											onClick={() => {navigate("/administratorlogin");}}
+										>
+											<IconSwap fontSize={12}/>
+										管理员登录
+										</Button>
+									</Space>
+								</Grid.Col>
+							</Grid.Row>
 						</div>
-						<div
-							style={{
-								color: "#1D2129",
-								fontSize: 16,
-								fontWeight: 500,
-								fontFamily: "PingFang SC",
-								wordWrap: "break-word",
-							}}>
-							大屏管理系统
-						</div>
-					</div>
-					<div>
-						<Space direction={"vertical"} size={15}>
-							<Space>
-								<Input
-									style={{ width: 220, borderRadius: 5 }}
-									prefix={<IconUser />}
-									suffix={<IconInfoCircle />}
-									placeholder="请输入用户名"
-									maxLength={{ length: 20, errorOnly: true }}
-									value={username}
-									onChange={(value: string, e) => handleChangeUserName(e)}
-									onPressEnter={e => handleChangeUserName(e)}
-
-								/>
-							</Space>
-							<Space>
-								<Input.Password
-									style={{ width: 220, borderRadius: 5 }}
-									placeholder="请输入密码"
-									maxLength={{ length: 20, errorOnly: true }}
-									value={password}
-									onChange={(value: string, e) => handleChangePassword(e)}
-									onPressEnter={e => handleChangePassword(e)}
-								/>
-							</Space>
-							<Space style={{ marginTop: 10 }}>
-								<Button
-									type={"primary"}
-									size={"large"}
-									style={{
-										paddingTop: 5,
-										paddingBottom: 5,
-										paddingLeft: 16,
-										paddingRight: 16,
-										fontSize: 14,
-										width: 220,
-										borderRadius: 5,
-									}}
-									onClick={handleSubmit}
-								>
-									登录
-								</Button>
-							</Space>
-						</Space>
-					</div>
-				</div>
-				<Space style={{float:"left",marginLeft:671,marginTop: -75}}>
-					<Button
-						type={"text"}
-						style={{
-							width: 96,
-							height: 24,
-							fontSize: 12,
-							fontWeight:400,
-							float: "right",
-						}}>
-						<IconSwap fontSize={12}/>
-						忘记密码
-					</Button>
-					<Button
-						type={"text"}
-						style={{
-							width: 104,
-							height: 24,
-							marginLeft: 5,
-							fontSize: 12,
-							fontWeight:400, alignItems: "center",
-						}}
-						onClick={() => {navigate("/administratorlogin");}}
-					>
-						<IconSwap fontSize={12}/>
-						管理员登录
-					</Button>
-				</Space>
-			</div>
-
-			<div style={{width:128,height:22,marginTop:0,marginLeft:"auto",marginRight:"auto",marginBottom:15}}>
-				<p style={{color: "#1D2129",
-					fontSize: 14,
-					fontFamily:" PingFang SC",
-					fontWeight: 400,
-					wordWrap: "break-word",
-					textAlign:"center"}}>
-					powered by SubIT
+					</Grid.Col>
+					<Grid.Col span={4}/>
+				</Grid.Row>
+			</Layout.Content>
+			<Layout.Footer>
+				<p
+					style={{
+						textAlign: "center",
+						fontFamily: "Lucida Grande"
+					}}>
+			powered by SubIT
 				</p>
-			</div>
-		</div>
+			</Layout.Footer>
+		</Layout>
 	);
 
 }
