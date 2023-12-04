@@ -65,8 +65,8 @@ function Login()
 		<Layout style={{height:"100vh", backgroundColor: "var(--color-fill-2)"}}>
 			<Layout.Content>
 				<Grid.Row style={{height:"100%"}}>
-					<Grid.Col span={4}/>
-					<Grid.Col span={16} style={{height:"100%"}}>
+					<Grid.Col span={5}/>
+					<Grid.Col span={14} style={{height:"100%"}}>
 						<div className={"main-frame"}>
 							<Grid.Row>
 								<Grid.Col span={10}>
@@ -145,7 +145,7 @@ function Login()
 							</Grid.Row>
 						</div>
 					</Grid.Col>
-					<Grid.Col span={4}/>
+					<Grid.Col span={5}/>
 				</Grid.Row>
 			</Layout.Content>
 			<Layout.Footer>

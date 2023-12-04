@@ -1,9 +1,9 @@
-
 .main-frame {
-    height: 50%;
-    margin-bottom: 50%;
+    position: absolute;
+    top: 50%;
+    height: 80%;
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 2px 5px 0 #000A;
-    transform: translateY(50%);
+    transform: translateY(-50%);
 }
