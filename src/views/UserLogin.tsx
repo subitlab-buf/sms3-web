@@ -65,11 +65,11 @@ function Login()
 		<Layout style={{height:"100vh", backgroundColor: "var(--color-fill-2)"}}>
 			<Layout.Content>
 				<Grid.Row style={{height:"100%"}}>
-					<Grid.Col span={5}/>
-					<Grid.Col span={14} style={{height:"100%"}}>
+					<Grid.Col span={3}/>
+					<Grid.Col span={18} style={{height:"100%"}}>
 						<div className={"main-frame"}>
 							<Grid.Row>
-								<Grid.Col span={10}>
+								<Grid.Col span={14}>
 									<Carousel
 										indicatorType={"dot"}
 										indicatorPosition={"right"}
@@ -83,7 +83,8 @@ function Login()
 										))}
 									</Carousel>
 								</Grid.Col>
-								<Grid.Col span={14}>
+								<Grid.Col span={2}/>
+								<Grid.Col span={6}>
 									<Space align="center">
 										<img
 											style={{
@@ -142,10 +143,11 @@ function Login()
 										</Button>
 									</Space>
 								</Grid.Col>
+								<Grid.Col span={3}/>
 							</Grid.Row>
 						</div>
 					</Grid.Col>
-					<Grid.Col span={5}/>
+					<Grid.Col span={2}/>
 				</Grid.Row>
 			</Layout.Content>
 			<Layout.Footer>
