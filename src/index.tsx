@@ -10,10 +10,10 @@ import {
 	createBrowserRouter,
 } from "react-router-dom";
 import Login from "./views/UserLogin";
-import AdministratorLogin from "./views/AdministratorLogin";
 import Dashboard from "./views/Dashboard";
 import Register from "./views/Register";
 
+import MainPage from "./views/DashboardPages/MainPage";
 
 
 
@@ -27,14 +27,28 @@ const router = createBrowserRouter([
 		element: <Login />,
 		errorElement: <Navigate to="/" />,
 	},{
-		path:"/administratorlogin",
-		element: <AdministratorLogin />,
-		errorElement: <Navigate to="/" />,
-
-	},{
 		path:"/dashboard",
 		element:<Dashboard/>,
-		errorElement: <Navigate to="/" />,
+		// errorElement: <Navigate to="/" />,
+		children:[
+			{
+				path:"",
+				element:<MainPage />,
+			},
+			{
+				path:"main",
+				element:<MainPage />,
+			},{
+				path:"submission",
+				element:<MainPage />,
+			},{
+				path:"history",
+				element:<MainPage />,
+			},{
+				path:"userinfo",
+				element:<MainPage />,
+			}
+		]
 	},{
 		path:"/register",
 		element: <Register />,

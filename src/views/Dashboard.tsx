@@ -1,86 +1,130 @@
-import "../Styles/Dashboard.css";
+import "../styles/Dashboard.css";
+import SubIt from "../assets/subit.svg";
 import "../components/Logo";
-import {useEffect, useState} from "react";
-import { Button, Carousel, Input, Space, Message, Menu, Layout, Breadcrumb} from "@arco-design/web-react";
-import {
-	IconUser,
-	IconInfoCircle,
-	IconSwap,
-	IconDashboard,
-	IconShareExternal,
-	IconHistory,
-} from "@arco-design/web-react/icon";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {Space, Layout, Grid} from "@arco-design/web-react";
+import {Menu} from "@arco-design/web-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Logo from "../components/Logo";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import PKUS from "../assets/pkus.svg";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
-import Logo from "../components/Logo";
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React,{useState} from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import MenuContext from "@arco-design/web-react/es/Menu/context";
+import {IconDashboard, IconHistory, IconUpload, IconUser} from "@arco-design/web-react/icon";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuItem = Menu.Item;
-const SubMenu = Menu.SubMenu;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Sider = Layout.Sider;
-const Header = Layout.Header;
-const Footer = Layout.Footer;
 const Content = Layout.Content;
+const collapsedWidth = 50;
+const normalWidth = 220;
 
-const imageSrc = [
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6480dbc69be1b5de95010289787d64f1.png~tplv-uwbnlip3yd-webp.webp",
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/0265a04fddbd77a19602a15d9d55d797.png~tplv-uwbnlip3yd-webp.webp",
-	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/24e0dd27418d2291b65db1b21aa62254.png~tplv-uwbnlip3yd-webp.webp",
-];
 
-function Login()
+function Dashboard()
 {
-	//scale控制模块
-	const [frameScale, setFrameScale] = useState(window.innerWidth < 300 ? 0.25 : ((window.screen.availWidth - 16) / 1200));
-	const changeScale = () => {
-		if(window.innerWidth < 300){
-			setFrameScale(0.25);
-		}else{
-			setFrameScale(((window.screen.availWidth - 16) / 1200));
-		}
-		//调整frame1的缩放（也会调整container1的width和gap）
-		//有最小宽度限制为300px，若屏幕宽度低于此则不会继续缩小
+	const [collapsed, setCollapsed] = useState(false);
+	const [logoCollapsed, setLogoCollapsed] = useState(false);
+	const [siderWidth, setSiderWidth] = useState(normalWidth);
+
+	const onCollapse = (collapsed:any) => {
+		setCollapsed(collapsed);
+		setSiderWidth(collapsed ? collapsedWidth : normalWidth);
 	};
 
-	useEffect(() => {
-		// 添加事件监听器
-		window.addEventListener("resize", changeScale);
+	// @ts-ignore
+	const handleMoving = (_:any, { width }) => {
+		if (width > collapsedWidth) {
+			setSiderWidth(width);
+			setCollapsed(!(width > collapsedWidth + 20));
+		} else {
+			setSiderWidth(collapsedWidth);
+			setCollapsed(true);
+		}
+		if (width > 150){
+			setLogoCollapsed(false);
+		}else {
+			setLogoCollapsed(true);
+		}
+	};
 
-		// 在组件卸载时清理事件监听器
-		return () => {
-			window.removeEventListener("resize", changeScale);
-		};
-	}, []);
 
+	const location = useLocation();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const  navigate = useNavigate();
+	// 获取路径的数组
+	const pathSegments = location.pathname.split("/").filter(Boolean);
+	// 获取层次最低的路径
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const lowestPath = pathSegments[pathSegments.length - 1] || "root";
 
-	//Input模块
-	const[username, setUsername] = useState("");
-	const[password, setPassword] = useState("");
-
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const myMenuItms = [
+		{
+			key:"1",
+			name:"工作台",
+			url:"main",
+			icon:<IconDashboard/>,
+			chosenIcon:<IconDashboard style={{color:"white"}}/>
+		},{
+			key:"2",
+			name:"立即投稿",
+			url:"submission",
+			icon:<IconUpload/>,
+			chosenIcon:<IconUpload style={{color:"white"}}/>
+		},{
+			key:"3",
+			name:"历史投稿",
+			url:"history",
+			icon: <IconHistory/>,
+			chosenIcon:<IconHistory style={{color:"white"}}/>
+		},{
+			key:"4",
+			name:"用户信息",
+			url:"userinfo",
+			icon:<IconUser/>,
+			chosenIcon:<IconUser style={{color:"white"}}/>
+		}];
 
 	return (
-		<div className='container2'	>
-			<Menu mode={"vertical"}  defaultSelectedKeys={["1"]} className={"menu"}>
-				<Space direction={"vertical"} size={24}>
-					<MenuItem key={"0"} style={{width:"100%",
-						display:"inline-flex",
-						flexDirection:"column",
-						alignItems:"center",
-						justifyContent:"center",
-						overflow:"hidden",
-						backgroundColor: "rgba(0,0,0,0%)"
-					}}><Logo/></MenuItem>
-					<Space size={0} direction={"vertical"}>
-						<MenuItem key='1' className={"menuBtn"}><IconDashboard fontSize={12}/>工作台</MenuItem>
-						<MenuItem key='2' className={"menuBtn"}><IconShareExternal fontSize={12}/>立即投稿</MenuItem>
-						<MenuItem key='3' className={"menuBtn"}><IconHistory fontSize={12}/>历史投稿</MenuItem>
-						<MenuItem key='4' className={"menuBtn"}><IconUser fontSize={12}/>用户信息</MenuItem>
-					</Space>
-				</Space>
-			</Menu>
-		</div>
+		<Layout className='container2' style={{height:"100vh"}}>
+			<Sider trigger={null} collapsible onCollapse={onCollapse} collapsed={collapsed} width={siderWidth} resizeBoxProps={{directions: ["right"], onMoving: handleMoving,}} style={{minWidth:collapsedWidth,overflow:"hidden"}}>
+				<div style={{height:"50%"}}>
+
+					<Grid.Col>
+						<div style={{
+							width:"100%",
+							paddingTop:28,
+							paddingBottom:24,
+							overflow:"hidden",
+							display:"inline-flex",
+							flexDirection:"column",
+							alignItems:"center",
+							justifyContent:"center",}}>
+							<div onClick={() => {window.open("https://subit.org.cn/");}} style={{backgroundColor: "rgba(0,0,0,0%)"}}>{logoCollapsed ? <div style={{padding:5,height:59,justifyContent: "center", alignItems: "center", display: "inline-flex", flexDirection:"column"}}><img src={SubIt} style={{width:"100%", maxWidth:60}}/></div> : <Logo/>}</div>
+						</div>
+						<Menu mode={"vertical"}  defaultSelectedKeys={["1"]} style={{height:"auto", width:"100%"}}>
+							{myMenuItms.map(item =>
+								<MenuItem key={item.key} className={"menuBtn"} style={(item.url === lowestPath || (lowestPath === "dashboard" && item.url === "main")) ? {backgroundColor:"#165DFF", color:"white", borderRadius:5}:{borderRadius:5}} onClick={() => {navigate("/dashboard/"+item.url);console.log("/dashboard/"+item.url);}}>{(item.url === lowestPath || (lowestPath === "dashboard" && item.url === "main")) ? item.chosenIcon: item.icon}{item.name}
+								</MenuItem>)}
+						</Menu>
+					</Grid.Col>
+				</div>
+				<Grid.Row style={{height:"50%"}} justify={"center"} align={"end"}>
+					<Grid.Col flex={"auto"}>
+						<img src={PKUS} style={{width:25, height:25, marginLeft:13,marginBottom:13}} onClick={() => {window.open("https://www.pkuschool.edu.cn/");}} alt={"25"}/>
+					</Grid.Col>
+				</Grid.Row>
+			</Sider>
+			<Content id="detail">
+				<Outlet/>
+			</Content>
+		</Layout>
 	);
-
 }
-
-export default Login;
+export default Dashboard;

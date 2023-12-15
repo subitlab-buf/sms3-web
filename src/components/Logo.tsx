@@ -1,11 +1,13 @@
 import SubITLogo from "../assets/subit.svg";
+import {Grid, Typography} from "@arco-design/web-react";
 
 function Logo() {
 	return (
-		<div
+		<Grid.Row
 			style={{
+				minWidth:200,
+				padding:5,
 				height: 59,
-				background: "white",
 				justifyContent: "center",
 				alignItems: "center",
 				display: "inline-flex",
@@ -14,8 +16,6 @@ function Logo() {
 			<div
 				style={{
 					height: 35,
-					paddingTop: 3,
-					paddingBottom: 3,
 					paddingRight: 3,
 					flexDirection: "column",
 					justifyContent: "center",
@@ -32,17 +32,12 @@ function Logo() {
 					src={SubITLogo}
 				/>
 			</div>
-			<div
-				style={{
-					color: "#1D2129",
-					fontSize: 16,
-					fontWeight: 500,
-					fontFamily: "PingFang SC",
-					wordWrap: "break-word",
-				}}>
-				大屏管理系统
+			<div>
+				<Typography.Text>
+					大屏管理系统
+				</Typography.Text>
 			</div>
-		</div>
+		</Grid.Row>
 	);
 }
 

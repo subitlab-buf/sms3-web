@@ -1,10 +1,6 @@
 
 
 .container2 {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
     width: 100%;
     height: 100%;
     background-color: #F5F6FA;
@@ -12,13 +8,11 @@
 
 .menu{
     width:233px;
-    height:768px;
     padding-top:32px;
 }
 
 .menuBtn{
-    width: 180px;
-    height: 22px;
+    height: 40px;
     font-family: "PingFang SC";
     font-size: 14px;
     font-weight: 400;
@@ -26,23 +20,9 @@
     word-wrap: break-word;
 }
 
-.login-panel {
-    top: 55px;
-    left: 649px;
-    display: inline-flex;
-    flex-direction: column;
-    gap: 32px;
-    align-items: center;
-    justify-content: center;
-    float: right;
-    width: 220px;
-    height: 237px;
-    padding: 27px 22px;
-    margin: 55px 76px 91px 43px;
-    overflow: hidden;
-    background: #FFF;
-    border-radius: 15px;
-    box-shadow: 0 2px 5px 0 #0000001A;
+.content{
+    position: absolute;
+    width: calc(100% - 233px);
 }
 
 .title1 {
@@ -56,20 +36,4 @@
     line-height: 24;
     color: #1D2129;
     word-wrap: break-word;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .spin {
-        animation: spin-animation infinite 20s linear;
-    }
-}
-
-@keyframes spin-animation {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
 }
