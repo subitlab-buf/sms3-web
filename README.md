@@ -1,3 +1,7 @@
+# sms-web
+
+### Warning: Any AI-asisted contents (except documentation) are not allowed in this repository!
+
 ## Basic Information
 
 Using [sms3-backend](https://github.com/subitlab/sms3-backend) as backend.\
