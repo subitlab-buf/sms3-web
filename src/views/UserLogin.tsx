@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Button, Carousel, Input, Space, Layout } from "@arco-design/web-react";
+import { Button, Carousel, Input, Space, Layout, Message} from "@arco-design/web-react";
 import { IconUser, IconInfoCircle, IconSwap} from "@arco-design/web-react/icon";
-import "../styles/Login.css";
-import SubITLogo from "../assets/subit.svg";
+import "../styles/UserLogin.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Logo from "../components/Logo";
 
 const imageSrc = [
 	"//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/cd7a1aaea8e1c5e3d26fe2591e561798.png~tplv-uwbnlip3yd-webp.webp",
@@ -14,11 +15,11 @@ const imageSrc = [
 
 const UserLogin: React.FC = () => {
 	const navigate= useNavigate();
-	const [username, setUsername] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const handleChangeUserName = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
-		setUsername(value);
+	const handleChangeEmail = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(value);
 	};
 
 	const handleChangePassword = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,9 +29,27 @@ const UserLogin: React.FC = () => {
 
 	const handleSubmit = () => {
 		// Your submission logic...
-		console.log(`Username: ${username}, Password: ${password}`);
-		// Navigate to main page if credentials are correct
-		// navigate('/mainpage');
+		console.log(`Username: ${email}, Password: ${password}`);
+		axios.post("http://182.92.67.83:10718/auth/login",{
+			email:email,
+			password:password
+		})
+			.then(res=>{
+				if(res.data.code===10000){
+					Message.info("登录成功");
+					localStorage.setItem("token","Bearer"+res.data.token);
+					navigate("/dashboard");
+				} else if(res.data.code===30003){
+					Message.error("邮箱或密码错误");
+				} else if(res.data.code===30001){
+					Message.error("用户被封禁");
+				} else{
+					Message.error("登录失败");
+				}
+			})
+			.catch(err=>{
+				Message.error("登录失败");
+			});
 	};
 
 	return (
@@ -47,7 +66,7 @@ const UserLogin: React.FC = () => {
 						>
 							{imageSrc.map((src, index) => (
 								<div key={index}>
-									<img src={src} style={{ width: "100%", height: "100%" }} alt={`carousel-${index}`} />
+									<img src={src} style={{ height: "100%" }} alt={`carousel-${index}`} />
 								</div>
 							))}
 						</Carousel>
@@ -55,51 +74,37 @@ const UserLogin: React.FC = () => {
 					<div className="login-container">
 						<Space direction="vertical" size="large" className="login-space">
 							<Space align="center">
-								<img
-									style={{
-										width: 60,
-										height: 30,
-										paddingTop: 6
-									}}
-									src={SubITLogo}
-									alt=""
-								/>
-								<div
-									style={{
-										fontSize: "large",
-										fontWeight: "bold",
-									}}>
-									大屏管理系统
-								</div>
+								<Logo type={{collapsed:false}}/>
 							</Space>
 							<Input
 								prefix={<IconUser />}
 								suffix={<IconInfoCircle />}
-								placeholder="请输入用户名"
-								value={username}
-								onChange={handleChangeUserName}
+								placeholder="请输入邮箱"
+								value={email}
+								onChange={handleChangeEmail}
 							/>
 							<Input.Password
 								placeholder="请输入密码"
 								value={password}
 								onChange={handleChangePassword}
 							/>
-							<Button type="primary" size="large" onClick={handleSubmit}>
+							<Button type="primary" size="large" className="login-button" onClick={handleSubmit}>
 								登录
 							</Button>
 							<Space>
 								<Button
 									type={"text"}
+									onClick={()=>{navigate("");}}
 								>
 									<IconSwap fontSize={12}/>
 									忘记密码
 								</Button>
 								<Button
 									type={"text"}
-									onClick={() => {navigate("/administratorlogin");}}
+									onClick={() => {navigate("/register");}}
 								>
 									<IconSwap fontSize={12}/>
-									管理员登录
+									注册用户
 								</Button>
 							</Space>
 						</Space>

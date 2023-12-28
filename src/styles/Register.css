@@ -9,11 +9,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 100%;
-    max-height: 100%;
-    aspect-ratio: 1009/536;
-    width: auto;
-    height: auto;
+    width: 80vw;
+    height: 70vh;
     margin-right: auto;
     margin-left: auto;
     overflow: hidden;
@@ -27,13 +24,13 @@
 
 @media screen and (min-aspect-ratio: 3/2){
     .frame2{
-        height: 100%;
+        max-height: 100%;
     }
 }
 
 @media screen and (max-aspect-ratio: 3/2){
     .frame2{
-       width: 95%;
+       max-width: 95vw;
     }
 }
 
@@ -44,13 +41,29 @@
     gap: 32px;
     align-items: center;
     justify-content: center;
-    width: calc(540 / 1009 * 100%);
-    height: calc(357 / 536 * 100%);
-    padding: 27px 22px;
     overflow: hidden;
     background: white;
     border-radius: 15px;
     box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+}
+
+@media(max-width: 768px) {
+    .register-panel{
+        width: 98%;
+        height: 90%;
+        padding: 10% 2%;
+    }
+
+
+}
+
+@media(min-width: 769px) {
+    .register-panel{
+        padding: 27px 22px;
+        width: calc(540 / 1009 * 100%);
+        height: calc(357 / 536 * 100%);
+    }
+
 }
 
 .panelInside{

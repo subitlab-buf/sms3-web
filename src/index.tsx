@@ -7,13 +7,15 @@ import reportWebVitals from "./reportWebVitals";
 import {
 	Navigate,
 	RouterProvider,
-	createBrowserRouter,
+	createBrowserRouter, Outlet,
 } from "react-router-dom";
 import Login from "./views/UserLogin";
 import Dashboard from "./views/Dashboard";
 import Register from "./views/Register";
 
 import MainPage from "./views/DashboardPages/MainPage";
+import Submission from "./views/DashboardPages/Submission";
+import SubmissionCreate from "./views/DashboardPages/Submission-Create";
 
 
 
@@ -40,7 +42,16 @@ const router = createBrowserRouter([
 				element:<MainPage />,
 			},{
 				path:"submission",
-				element:<MainPage />,
+				element:<>
+					<Outlet/>
+				</>,
+				children:[{
+					path:"",
+					element:<Submission />,
+				}, {
+					path:"create",
+					element:<SubmissionCreate />,
+				}]
 			},{
 				path:"history",
 				element:<MainPage />,

@@ -1,0 +1,69 @@
+.layout {
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    min-height: 100vh; /* Ensure it covers the full height */
+    background-color: var(--color-fill-2); /* Replace with the actual color variable or value */
+}
+
+.main-frame {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Keeps the space between the carousel and login components */
+    width: 80vw; /* 80% of the viewport width */
+    height: 70vh; /* 60% of the viewport height */
+    padding: 0 3%; /* Adjust padding as needed */
+    margin-top: 14vh;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+}
+
+/* Ensure you remove any absolute positioning or margins that may affect the centering */
+
+
+
+/* Rest of your CSS code for carousel-container, login-container, etc. */
+
+
+.carousel-container {
+    flex: 1; /* Flex-grow to take available space */
+    max-width: 60%; /* Adjust as needed */
+    height: 60vh;
+    max-height: 60%;
+    margin-right: 5%;
+    margin-left: auto;
+}
+
+.carousel-container .carousel {
+    width: 100%;
+    height: 100%;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px; /* Fixed width or use flex-basis */
+    padding: 3%;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+}
+
+.login-space .login-button{
+    width: 100%;
+}
+
+.footer {
+    width: 100%;
+    padding: 16px 0;
+    text-align: center;
+}
+
+@media (max-width:768px) { /* Adjust the max-width as needed */
+    .carousel-container {
+        display: none; /* Hides the carousel-container on small screens */
+    }
+}

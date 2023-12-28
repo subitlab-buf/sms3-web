@@ -2,35 +2,59 @@ import "../styles/Register.css";
 import Logo from "../components/Logo";
 import tempImg from "../assets/860x430.png";
 import { useState, useEffect } from "react";
+import { Select } from "@arco-design/web-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {Button, Input, Space, Grid, Message, Typography} from "@arco-design/web-react";
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import {IconLeft, IconUser} from "@arco-design/web-react/icon";
-
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function Login() {
+	const navigate= useNavigate();
+	const Option = Select.Option;
 	//验证码倒计时
 
-	const [countdown, setCountdown] = useState(60);
+	const [countdown, setCountdown] = useState(300);
 	const [isCounting, setIsCounting] = useState(false);
+	const [isSending, setIsSending] = useState(false);
 
 	const sendCaptcha = () => {
-		const emailTest =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const emailTest = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 		if(emailTest.test(email)){
-			//TODO: 向后端发送注册验证邮箱邮件（/auth/registerCaptcha）
-			let msg = {
-				"email":email
-			};
-			console.log(msg);
-			//then
-			setIsCounting(true);
-			//Message.success("已发送验证码");
-
-			//catch
-			//Message.error("验证码发送失败");
+			setIsSending(true); // 开始发送请求
+			axios.post("http://182.92.67.83:10718/auth/registerCaptcha", { email })
+				.then(res => {
+					if(res.data.code === 10000){
+						Message.info("发送验证码成功");
+						setIsCounting(true);
+						setIsSending(false);
+						// 开始倒计时
+						const interval = setInterval(() => {
+							setCountdown((prevCountdown) => {
+								if (prevCountdown <= 1) {
+									clearInterval(interval);
+									setIsCounting(false);
+									return 300; // 重置倒计时
+								}
+								return prevCountdown - 1;
+							});
+						}, 1000);
+					} else if(res.data.code===30010){
+						setIsSending(false);
+						Message.error("验证码发送过于频繁");
+					} else {
+						setIsSending(false);
+						Message.error("发送验证码失败");
+					}
+				}).catch(err => {
+					setIsSending(false);
+					Message.error("发送验证码失败");
+				});
 		}
 	};
+
 
 
 	useEffect(() => {
@@ -50,7 +74,7 @@ function Login() {
 	useEffect(() => {
 		if (countdown === 0) {
 			setIsCounting(false);
-			setCountdown(60); // 重置倒计时
+			setCountdown(300); // 重置倒计时
 		}
 	}, [countdown]);
 
@@ -63,7 +87,18 @@ function Login() {
 	const [sId, setSId] = useState("");
 	const [email, setEmail] = useState("");
 	const [captcha, setCaptcha] = useState("");
+	const [department, setDepartment] = useState("");
+	const handleChangeDepartment = (value :string) => {
+		setDepartment(value);
+	};
 
+
+	const departments = [
+		{ value: "01", label: "test1" },
+		{ value: "02", label: "test2" },
+		{ value: "03", label: "test3"}
+		// 更多选项...
+	];
 	function next() {
 		//setPanel("1-2");
 		if(username.length > 0){
@@ -95,10 +130,25 @@ function Login() {
 						"realName": realName,
 						"email": email,
 						"sid": sId,
-						"department": "01",
+						"department": department,
 						"captcha": captcha
 					};
 					console.log(msg);
+					axios.post("http://182.92.67.83:10718/auth/register",msg)
+						.then(res=>{
+							if(res.data.code===10000){
+								Message.info("注册成功");
+								navigate("/login");
+							}else if(res.data.code===30002){
+								Message.error("验证码错误");
+							}else if(res.data.code===30007){
+								Message.error("邮箱已被注册");
+							} else{
+								Message.error("注册失败");
+							}
+						}).catch(err=>{
+							Message.error("注册失败");
+						});
 				}else {
 					Message.error("邮箱格式错误");
 				}
@@ -133,26 +183,86 @@ function Login() {
 
 			</Grid.Row>
 
-			<Grid.Row justify={"center"} align={"center"} style={{height:"calc(536 / 800 *100vh)", width:"100%"}}>
-				<div className={"frame2"} style={{backgroundColor:"var(--color-white)"}}>
-					<img src={tempImg} style={{height:"80%"}}/>
-					<div className={"register-panel"} style={{
-						position:"absolute",
-						justifyContent: "center",
-						alignItems: "center",
-						display: "inline-flex",
-						flexDirection: "column"}}>
-						<Logo/>
-						<Button className={`btn-${(panel === "1-2" ? "show" : "fade")}`} type={"default"} shape={"round"} size={"large"} icon={<IconLeft/>} style={{position:"absolute",marginRight:"80%",marginBottom:"53%"}} onClick={() => {setPanel("2-1");}}></Button>
-						<div style={{width:"80%",height:"90%",overflow:"hidden"}}>
-							<Grid.Row justify="space-around" style={{width:"200%",height:"80%"}} className={`panel-${panel}`} align={"center"}>
-								<Grid.Col span={8} style={{display:"flex",flexDirection:"column", alignItems:"center",height:"100%",justifyContent:"space-between"}}>
-									<Input style={{width:"45%", minWidth:220}} size={"large"} prefix={<IconUser/>} placeholder={"请输入用户名"} onChange={(value: string, e) => {setUsername(value);}}>
-									</Input>
-									<Input.Password style={{marginTop:2,width:"45%", minWidth:220}} size={"large"}placeholder={"请输入密码"} onChange={(value: string, e) => {setPassword(value);}}>
-									</Input.Password>
-									<Input.Password visibility={false} style={{marginTop:2,width:"45%", minWidth:220}} size={"large"} placeholder={"请确认你的密码"} onChange={(value: string, e) => {setConfirm(value);}}>
-									</Input.Password>
+			<Grid.Row 
+				justify={"center"} 
+				align={"center"} 
+				style={{height:"calc(536 / 800 *100vh)", width:"100%"}}
+			>
+				<div 
+					className={"frame2"} 
+					style={{backgroundColor:"var(--color-white)"}}
+				>
+					<div style={{height:"80%", width:"90%", display:"flex", justifyContent:"center", alignItems:"center",overflow:"hidden"}}>
+						<img src={tempImg} style={{height:"100%"}}/>
+					</div>
+					<div 
+						className={"register-panel"} 
+						style={{
+							position:"absolute",
+							justifyContent: "center",
+							alignItems: "center",
+							display: "inline-flex",
+							flexDirection: "column"}}
+					>
+						<Logo type={{collapsed:false}}/>
+						<Button
+							className={`btn-${(panel === "1-2" ? "show" : "fade")}`}
+							type={"default"}
+							shape={"round"}
+							size={"large"}
+							icon={<IconLeft/>}
+							style={{position:"absolute",marginRight:"80%"}}
+							onClick={() => {setPanel("2-1");}}
+						/>
+						<div
+							style={{width:"80%",height:"90%",overflow:"hidden"}}
+						>
+							<Grid.Row
+								justify="space-around"
+								style={{width:"200%",height:"80%"}}
+								className={`panel-${panel}`}
+								align={"center"}
+							>
+								<Grid.Col
+									span={8}
+									style={{
+										display:"flex",
+										flexDirection:"column",
+										alignItems:"center",
+										height:"100%",
+										justifyContent:"space-between"}}
+								>
+									<Input 
+										style={{width:"45%", minWidth:220}} 
+										size={"large"} 
+										prefix={<IconUser/>} 
+										placeholder={"请输入用户名"} 
+										onChange={(value: string, e) => {setUsername(value);}}
+									/>
+
+									<Select
+										placeholder="请选择部门/书院"
+										onChange={handleChangeDepartment}
+										style={{marginTop:5,width:"45%", minWidth:220}}
+									>
+										{departments.map(option => (
+											<Option key={option.value} value={option.value}>{option.label}</Option>
+										))}
+									</Select>
+
+									<Input.Password 
+										style={{marginTop:2,width:"45%", minWidth:220}} 
+										size={"large"}
+										placeholder={"请输入密码"} 
+										onChange={(value: string, e) => {setPassword(value);}}
+									/>
+									<Input.Password 
+										visibility={false} 
+										style={{marginTop:2,width:"45%", minWidth:220}} 
+										size={"large"} 
+										placeholder={"请确认你的密码"} 
+										onChange={(value: string, e) => {setConfirm(value);}}
+									/>
 									<div style={{marginTop:2,height:32,width:"45%",minWidth:220}}>
 									</div>
 									<Button
@@ -174,30 +284,75 @@ function Login() {
 										下一步
 									</Button>
 								</Grid.Col>
-								<Grid.Col span={8} style={{display:"flex",flexDirection:"column", alignItems:"center",height:"100%",justifyContent:"space-between"}}>
-									<Input style={{width:"45%", minWidth:220}} size={"large"}  placeholder={"请输入真实姓名"} onChange={(value: string, e) => {setRealName(value);}}>
-									</Input>
-									<Input style={{marginTop:2,width:"45%", minWidth:220}} size={"large"} placeholder={"请输入学号"} onChange={(value: string, e) => {setSId(value);}}>
-									</Input>
-									<Input value={email} style={{marginTop:2,width:"45%", minWidth:220}} size={"large"} placeholder={"请输入邮箱"} onChange={(value: string, e) => {setEmail(value);}}>
-									</Input>
-									<div style={{marginTop:2,width:"45%", minWidth:220}}>
+								<Grid.Col
+									className={"user-information"}
+									span={8}
+									style={{display:"flex",
+										flexDirection:"column",
+										alignItems:"center",
+										height:"100%",
+										justifyContent:"space-between",
+										marginLeft:"5%"}}
+								>
+									<Input
+										style={{width:"45%", minWidth:220}}
+										size={"large"}
+										placeholder={"请输入真实姓名"}
+										onChange={(value: string, e) => {setRealName(value);}}
+									/>
+
+									<Input
+										style={{marginTop:5,width:"45%", minWidth:220}}
+										size={"large"}
+										placeholder={"请输入学号"}
+										onChange={(value: string, e) => {setSId(value);}}
+									/>
+
+									<Input
+										value={email}
+										style={{marginTop:5,width:"45%", minWidth:220}}
+										size={"large"}
+										placeholder={"请输入邮箱"}
+										onChange={(value: string, e) => {setEmail(value);}}
+									/>
+									<div style={{marginTop:5,width:"45%", minWidth:220}}>
 										<Input value={captcha} style={{width:"100%", minWidth:220}} size={"large"} placeholder={"请输入验证码"} maxLength={6} onChange={(value: string, e) => {setCaptcha(value);}}>
 										</Input>
-										{isCounting ?
-											<Button loading={true} style={{width: 110,transform:"translate(-114px)", marginTop:4,position:"absolute"}} size={"small"} type={"primary"}>
+										{isCounting
+											? <Button 
+												loading={isSending} 
+												disabled 
+												style={{
+													width: 110, 
+													transform: "translate(-114px)", 
+													marginTop: 4, 
+													position: "absolute"
+												}} 
+												size={"small"}
+												type={"primary"}>
 												已发送{countdown}s
 											</Button>
-											:
-											<Button loading={false} onClick={sendCaptcha} style={{width: 110,transform:"translate(-114px)", marginTop:4,position:"absolute"}} size={"small"} type={"primary"}>
-											获取验证码
-											</Button>}
+											: <Button
+												loading={isSending}
+												onClick={sendCaptcha}
+												style={{
+													width: 110,
+													transform: "translate(-114px)",
+													marginTop: 4,
+													position: "absolute"
+												}}
+												size={"small"}
+												type={"primary"}>
+												获取验证码
+											</Button>
+										}
+
 									</div>
 									<Button
 										type={"primary"}
 										size={"large"}
 										style={{
-											marginTop:5,
+											marginTop:10,
 											paddingTop: 5,
 											paddingBottom: 5,
 											paddingLeft: 16,
