@@ -1,5 +1,4 @@
 import SubITLogo from "../assets/subit.svg";
-import SubITLogoRvt from "../assets/SubIT-Rvt-Transparent.svg";
 import {Grid, Typography} from "@arco-design/web-react";
 
 interface TypeProps {
@@ -17,7 +16,7 @@ const Logo = ({ type }:TypeProps) => {
 			</div>);
 		}else {
 			return ( <div style={{padding:5,height:59,justifyContent: "center", alignItems: "center", display: "inline-flex", flexDirection:"column"}}>
-				<img src={SubITLogoRvt} style={{width:"100%", maxWidth:60}}/>
+				<img src={SubITLogo} style={{width:"100%", maxWidth:60}}/>
 			</div>);
 		}
 	}else {
@@ -88,7 +87,7 @@ const Logo = ({ type }:TypeProps) => {
 								background: "linear-gradient(0deg, 0%, 100%)",
 								filter:"revert"
 							}}
-							src={SubITLogoRvt}
+							src={SubITLogo}
 						/>
 					</div>
 					<div>

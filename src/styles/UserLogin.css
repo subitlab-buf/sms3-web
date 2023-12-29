@@ -62,7 +62,7 @@
     text-align: center;
 }
 
-@media (max-width:768px) { /* Adjust the max-width as needed */
+@media (width <=768px) { /* Adjust the max-width as needed */
     .carousel-container {
         display: none; /* Hides the carousel-container on small screens */
     }
