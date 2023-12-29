@@ -54,7 +54,7 @@ const UserLogin: React.FC = () => {
 
 	return (
 		<Layout className="layout">
-			<Layout.Content>
+			<Layout.Content style={{width:"100%"}}>
 				<div className="main-frame">
 					<div className="carousel-container">
 						<Carousel
@@ -66,17 +66,19 @@ const UserLogin: React.FC = () => {
 						>
 							{imageSrc.map((src, index) => (
 								<div key={index}>
-									<img src={src} style={{ height: "100%" }} alt={`carousel-${index}`} />
+									<img src={src} className={"img"} alt={`carousel-${index}`} />
 								</div>
 							))}
 						</Carousel>
 					</div>
 					<div className="login-container">
-						<Space direction="vertical" size="large" className="login-space">
+						<div className="login-space" >
 							<Space align="center">
 								<Logo type={{collapsed:false}}/>
 							</Space>
 							<Input
+								className={"login-forms"}
+								size={"large"}
 								prefix={<IconUser />}
 								suffix={<IconInfoCircle />}
 								placeholder="请输入邮箱"
@@ -84,14 +86,15 @@ const UserLogin: React.FC = () => {
 								onChange={handleChangeEmail}
 							/>
 							<Input.Password
+								className={"login-forms"}
 								placeholder="请输入密码"
 								value={password}
 								onChange={handleChangePassword}
 							/>
-							<Button type="primary" size="large" className="login-button" onClick={handleSubmit}>
+							<Button type="primary" size="large" className="login-forms" onClick={handleSubmit}>
 								登录
 							</Button>
-							<Space>
+							<div className={"login-forms"} style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
 								<Button
 									type={"text"}
 									onClick={()=>{navigate("");}}
@@ -106,8 +109,8 @@ const UserLogin: React.FC = () => {
 									<IconSwap fontSize={12}/>
 									注册用户
 								</Button>
-							</Space>
-						</Space>
+							</div>
+						</div>
 					</div>
 				</div>
 			</Layout.Content>

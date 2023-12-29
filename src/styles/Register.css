@@ -22,15 +22,15 @@
 
 
 
-@media screen and (min-aspect-ratio: 3/2){
+@media screen and (aspect-ratio >= 3/2){
     .frame2{
         max-height: 100%;
     }
 }
 
-@media screen and (max-aspect-ratio: 3/2){
+@media screen and (aspect-ratio <= 3/2){
     .frame2{
-       max-width: 95vw;
+        max-width: 95vw;
     }
 }
 
@@ -47,7 +47,7 @@
     box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
 }
 
-@media(max-width: 768px) {
+@media(width <= 768px) {
     .register-panel{
         width: 98%;
         height: 90%;
@@ -57,11 +57,11 @@
 
 }
 
-@media(min-width: 769px) {
+@media(width >= 769px) {
     .register-panel{
-        padding: 27px 22px;
         width: calc(540 / 1009 * 100%);
         height: calc(357 / 536 * 100%);
+        padding: 27px 22px;
     }
 
 }

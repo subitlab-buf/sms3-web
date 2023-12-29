@@ -2,13 +2,11 @@ import "../../styles/Dashboard.css";
 import "../../components/Logo";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {useEffect, useState} from "react";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
 	Button,
 	Space,
 	Menu,
 	Layout,
-	Breadcrumb,
 	Grid,
 	Link,
 	Steps, Typography, Statistic, Radio, List, Dropdown, Empty
@@ -25,17 +23,11 @@ import {useNavigate} from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuItem = Menu.Item;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SubMenu = Menu.SubMenu;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Sider = Layout.Sider;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Header = Layout.Header;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Footer = Layout.Footer;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Content = Layout.Content;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const BreadcrumbItem = Breadcrumb.Item;
 const Row = Grid.Row;
 const Col = Grid.Col;
 const Step = Steps.Step;
@@ -181,6 +173,8 @@ let historyDrafts = 0;
 drafts.data.draftInfoList.map(draft => { // @ts-ignore
 	if(draft.status === 1 && draft.permittedEnd < Date.parse(new Date())){
 		historyDrafts += 1;
+	}else {
+		return null;
 	}} );
 
 //TODO:获取全部大屏ID(/screen/getAll)
@@ -215,7 +209,6 @@ for(let i =0; i<screens.data.length; i++){
 	screenContents.push(getScreenCurrent(screens.data[i].screenId));
 }
 
-console.log(screenContents);
 
 function getScreenCurrent(sceenID:any){
 
@@ -303,7 +296,6 @@ let notices = {
 
 //从通知列表获取最新通知
 let exhibitNotice = notices.data.sort((a, b) => b.createTime - a.createTime)[0];
-console.log(exhibitNotice);
 
 
 function MainPage()
@@ -500,7 +492,6 @@ function MainPage()
 														</Col>
 													</Row>
 												);}
-													break;
 												case 1:{return(
 													<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
 														<Col flex={"128px"}>
@@ -515,7 +506,6 @@ function MainPage()
 														</Col>
 													</Row>
 												);}
-													break;
 												case 0:{return(
 													<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
 														<Col flex={"128px"}>
@@ -530,7 +520,6 @@ function MainPage()
 														</Col>
 													</Row>
 												);}
-													break;
 												}}) :
 												//宽度不够时
 												<Row justify={"space-between"} align={"start"}>
@@ -550,7 +539,6 @@ function MainPage()
 																</Col>
 															</Col>
 														);}
-															break;
 														case 1:{return(
 															<Col span={7} style={{}} key={draft.title}>
 																<Col flex={"128px"}>
@@ -565,7 +553,6 @@ function MainPage()
 																</Col>
 															</Col>
 														);}
-															break;
 														case 0:{return(
 															<Col span={7} style={{}} key={draft.title}>
 																<Col flex={"128px"}>
@@ -580,7 +567,6 @@ function MainPage()
 																</Col>
 															</Col>
 														);}
-															break;
 														}})}
 												</Row>)}
 									</div>

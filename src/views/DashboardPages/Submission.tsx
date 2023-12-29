@@ -9,7 +9,7 @@ import {
 	Layout,
 	Breadcrumb,
 	Grid,
-	Link, Typography, Dropdown, Steps
+	Link, Typography, Dropdown, Steps, Message
 } from "@arco-design/web-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
@@ -19,12 +19,10 @@ import {
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuItem = Menu.Item;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SubMenu = Menu.SubMenu;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Sider = Layout.Sider;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Header = Layout.Header;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,6 +34,29 @@ const BreadcrumbItem = Breadcrumb.Item;
 const Row = Grid.Row;
 const Col = Grid.Col;
 const Step = Steps.Step;
+
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getUserInfo =  async ()  => {
+	try {
+		const token = localStorage.getItem("token");
+		const res = await axios.get("http://182.92.67.83:10718/user/getInfo",{
+			headers:{
+				"Authorization":"Bearer" + token,
+				"Content-Type": "application/json"
+			}
+		});
+
+		if(res.status === 200){
+			console.log(res.data);
+		}else{
+			Message.error("获取用户信息失败");
+		}
+	}catch (error){
+		console.log(error);
+		Message.error("错误");
+	}
+};
 
 //TODO:获取用户信息user/getInfo
 let userInfo = {
@@ -51,7 +72,6 @@ let userInfo = {
 	},
 	"timeStamp": 12345
 };
-
 
 //TODO:获取用户全部投稿
 let drafts = {
@@ -74,7 +94,7 @@ let drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1701402846578,
+				"createTime": 1703840592989,
 				"auditTime": 1701402846751
 			},
 			{
@@ -91,7 +111,7 @@ let drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1701402846860,
+				"createTime": 1703840592988,
 				"auditTime": 1701402847057
 			},
 			{
@@ -108,7 +128,7 @@ let drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1701402847157,
+				"createTime": 1703840592987,
 				"auditTime": 1701402847317
 			},
 			{
@@ -125,12 +145,12 @@ let drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1701402847670,
+				"createTime": 1703840592989,
 				"auditTime": 1701402847823
 			},
 			{
 				"draftId": "32585e72-935e-46f1-8cfe-8cd8b9e5fe74",
-				"title": "test",
+				"title": "test5",
 				"content": null,
 				"description": "test",
 				"startDate": 1701402857000,
@@ -142,12 +162,12 @@ let drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1701402847397,
+				"createTime": 1703840592989,
 				"auditTime": 1701402847566
 			},
 			{
 				"draftId": "992c3fb6-9ac5-4e20-b5f0-31072a243312",
-				"title": "test",
+				"title": "test6",
 				"content": null,
 				"description": "test",
 				"startDate": 1701402901000,
@@ -159,7 +179,7 @@ let drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1701402891811,
+				"createTime": 1703840592989,
 				"auditTime": 1701402892176
 			}
 		]
@@ -167,13 +187,31 @@ let drafts = {
 	"timeStamp": 1701404345523
 };
 
-
-let tempLst:any = [];
-for(let  i = 0; i < drafts.data.draftInfoList.length; i++){
-	if(drafts.data.draftInfoList[i].createTime >=  Math.floor(Date.now() - 37 * 24 * 60 * 60 * 1000)){
-		tempLst.push(drafts.data.draftInfoList[i]);
+const tempLst = drafts.data.draftInfoList.sort((a, b) => b.createTime - a.createTime).map(draft => {
+	if(draft.createTime >=  Math.floor(Date.now() - 7 * 24 * 60 * 60 * 1000)){
+		console.log(draft);
+		return(draft);
+	}else {
+		//返回一个在map中不会return的特定object
+		return({
+			"draftId": "0",
+			"title": "0",
+			"content": null,
+			"description": "0",
+			"startDate": 0,
+			"endDate": 0,
+			"permittedBegin": 0,
+			"permittedEnd": 0,
+			"status": 3,
+			"suggestion": "0",
+			"screenId": "0",
+			"filesName": [],
+			"sourceId": 0,
+			"createTime": 0,
+			"auditTime": 0
+		});
 	}
-}
+});
 
 
 
@@ -184,8 +222,9 @@ function Submission()
 	const [availableHeight, setAvailableHeight] = useState(window.screen.availHeight);
 	const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
+
+
 	useEffect(() => {
-		// 创建一个事件处理函数，用于在窗口大小改变时更新 innerWidth
 		const handleResize = () => {
 			setAvailableHeight(window.screen.availHeight);
 			setInnerWidth(window.innerWidth);
@@ -251,31 +290,35 @@ function Submission()
 						display: "inline-flex"}}>
 						<div style={{width:"100%", height:"100%",paddingLeft:9, paddingRight:9,display:"flex",flexDirection:"column", justifyContent:"space-between",overflow:"hidden"}}>
 							<Typography.Paragraph style={{margin:0,height:24}}>
-								<Typography.Title  style={{margin: 0}} heading={6}>7天内{tempLst.length > 0 ? "没有投稿" : `有投稿${tempLst.length}个`}</Typography.Title>
+								<Typography.Title style={{margin: 0}} heading={6}>7天内{tempLst.length < 0 ? "没有投稿" : `有投稿${tempLst.length}个`}</Typography.Title>
 							</Typography.Paragraph>
 							<div style={{marginTop:30,paddingLeft:17, paddingRight:17,width:"calc( 493/767 * 100%)"}}>
 								{tempLst.length > 0  &&
-									(innerWidth > 1200  ? tempLst.slice(0,7).map((draft:any) => {
+									(innerWidth > 1200  ? tempLst.map(draft => {
+										console.log(draft);
+										// @ts-ignore
 										switch (draft.status){
-										case 2:{return(
+										case 2:{
+											return(// @ts-ignore
+												<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
+													<Col flex={"128px"}>
+														<Typography.Text ellipsis={{ wrapper: "span" }} >{// @ts-ignore
+															draft.title}</Typography.Text>
+													</Col>
+													<Col flex={"auto"} style={{minWidth:300}}>
+														<Steps type='dot' status={"error"} current={3} style={{width:"100%",minWidth:300}}>
+															<Step title='上传'/>
+															<Step title='审核中' />
+															<Step title='已驳回'/>
+														</Steps>
+													</Col>
+												</Row>
+											);}
+										case 1:{return(// @ts-ignore
 											<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
 												<Col flex={"128px"}>
-													<Typography.Text ellipsis={{ wrapper: "span" }} >{draft.title}</Typography.Text>
-												</Col>
-												<Col flex={"auto"} style={{minWidth:300}}>
-													<Steps type='dot' status={"error"} current={3} style={{width:"100%",minWidth:300}}>
-														<Step title='上传'/>
-														<Step title='审核中' />
-														<Step title='已驳回'/>
-													</Steps>
-												</Col>
-											</Row>
-										);}
-											break;
-										case 1:{return(
-											<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-												<Col flex={"128px"}>
-													<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
+													<Typography.Text ellipsis={{ wrapper: "span" }}>{// @ts-ignore
+														draft.title}</Typography.Text>
 												</Col>
 												<Col flex={"auto"} style={{minWidth:300}}>
 													<Steps type='dot' status={"process"} current={3} style={{width:"100%",minWidth:300}}>
@@ -286,11 +329,11 @@ function Submission()
 												</Col>
 											</Row>
 										);}
-											break;
-										case 0:{return(
+										case 0:{return(// @ts-ignore
 											<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
 												<Col flex={"128px"}>
-													<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
+													<Typography.Text ellipsis={{ wrapper: "span" }}>{// @ts-ignore
+														draft.title}</Typography.Text>
 												</Col>
 												<Col flex={"auto"} style={{minWidth:300}}>
 													<Steps type='dot' status={"process"} current={2} style={{width:"100%",minWidth:300}}>
@@ -301,7 +344,9 @@ function Submission()
 												</Col>
 											</Row>
 										);}
-											break;
+										default:{
+											return null;
+										}
 										}}) :
 										//宽度不够时
 										<Row justify={"space-between"} align={"start"}>
@@ -321,7 +366,6 @@ function Submission()
 														</Col>
 													</Col>
 												);}
-													break;
 												case 1:{return(
 													<Col span={7} style={{}} key={draft.title}>
 														<Col flex={"128px"}>
@@ -336,7 +380,6 @@ function Submission()
 														</Col>
 													</Col>
 												);}
-													break;
 												case 0:{return(
 													<Col span={7} style={{}} key={draft.title}>
 														<Col flex={"128px"}>
@@ -351,13 +394,15 @@ function Submission()
 														</Col>
 													</Col>
 												);}
-													break;
+												default:{
+													return null;
+												}
 												}})}
 										</Row>)}
 							</div>
 							<div  style={{
 								width:"calc( 316/767 * 100%)",
-								minWidth:281,
+								minWidth:261,
 								float:"left",
 								overflow:"hidden",
 								border:"1px var(--color-border-2) solid",
@@ -379,7 +424,7 @@ function Submission()
 									<Typography.Text type={"secondary"}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>
 								</div>
 							</div>
-							<div style={{height:24}}>
+							<div style={{height:24,marginTop:10}}>
 								<Link onClick={() => {navigate("/dashboard/history");}}>查看历史<IconRightCircle/></Link>
 							</div>
 						</div>

@@ -18,13 +18,13 @@
     object-fit: contain;
 }
 
-@media screen and (min-aspect-ratio: 3/2){
+@media screen and (aspect-ratio >= 3/2){
     .main-frame{
         height: 100%;
     }
 }
 
-@media screen and (max-aspect-ratio:3/2){
+@media screen and (aspect-ratio <=3/2){
     .main-frame{
         width: 95%;
     }
