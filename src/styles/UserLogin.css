@@ -47,9 +47,9 @@
     min-height: 220px;
     max-height: 400px;
     padding:27px 22px;
-    background-color: var(--color-bg-2);
     margin-right: auto;
     margin-left: auto;
+    background-color: var(--color-bg-2);
     border-radius: 20px;
     box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
 }
@@ -79,32 +79,32 @@
 }
 
 
-@media (aspect-ratio < 1/1) or (max-width: 768px) or (max-height:480px){ /* Adjust the max-width as needed */
+@media (aspect-ratio < 1/1) or (width <= 768px) or (height <=480px){ /* Adjust the max-width as needed */
     .carousel-container {
         display: none; /* Hides the carousel-container on small screens */
     }
 
     .main-frame{
+        justify-content: center;
         width: 0;
         height: 0;
         margin-top: 50vh;
-        justify-content: center;
     }
 }
 
-@media screen and (aspect-ratio >= 1/1) and (min-width:768px) and (min-height:480px){
+@media screen and (aspect-ratio >= 1/1) and (width >=768px) and (height >=480px){
     .main-frame{
+        justify-content: space-between; /* Keeps the space between the carousel and login components */
         width: 80vw; /* 80% of the viewport width */
         height: 55vh; /* 60% of the viewport height */
+        min-height: 400px;
         padding: 0 3%; /* Adjust padding as needed */
         margin-top: 22.5vh;
-        justify-content: space-between; /* Keeps the space between the carousel and login components */
-        min-height: 400px;
     }
 
     .login-container{
-        height: 300px;
         width: 300px;
+        height: 300px;
     }
 }
 
