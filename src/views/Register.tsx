@@ -188,7 +188,7 @@ function Login() {
 					style={{backgroundColor:"var(--color-white)"}}
 				>
 					<div style={{height:"80%", width:"90%", display:"flex", justifyContent:"center", alignItems:"center",overflow:"hidden"}}>
-						<img src={tempImg} style={{height:"100%"}}/>
+						<img alt={"auto"} src={tempImg} style={{height:"100%"}}/>
 					</div>
 					<div 
 						className={"register-panel"} 

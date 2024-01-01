@@ -17,12 +17,11 @@ import {
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuItem = Menu.Item;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SubMenu = Menu.SubMenu;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Sider = Layout.Sider;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Header = Layout.Header;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,8 +33,34 @@ const BreadcrumbItem = Breadcrumb.Item;
 const Row = Grid.Row;
 const Col = Grid.Col;
 
-//TODO:获取用户信息user/getInfo
-let userInfo = {
+
+const getUserInfo =  async ()  => {
+	try {
+		const token = localStorage.getItem("token");
+		const res = await axios.get("http://182.92.67.83:10718/user/getInfo",{
+			headers:{
+				"Authorization":"Bearer" + token,
+				"Content-Type": "application/json"
+			}
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			return(res);
+		}else{
+			Message.error("获取用户信息失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+};
+
+
+let userInfo:any = getUserInfo();
+
+userInfo = {
 	"code": 10000,
 	"message": "success",
 	"data": {
@@ -49,7 +74,9 @@ let userInfo = {
 	"timeStamp": 12345
 };
 
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const uploadNewFile = (file:File) => {
+};
 
 function SubmissionCreate()
 {
@@ -72,6 +99,7 @@ function SubmissionCreate()
 	];
 
 
+	//在窗口大小改变时获取窗口大小和屏幕大小（该项适用于移动端）
 	useEffect(() => {
 		const handleResize = () => {
 			setAvailableHeight(window.screen.availHeight);
@@ -88,31 +116,35 @@ function SubmissionCreate()
 		};
 	}, []);
 
-	const isAcceptFile = (file:any, accept:any) => {
+
+	//文件格式要求
+	const acceptFiles = ".jpg,.jpeg,.png,.pdf,.doc,.docx,.ppt,.pptx,.mp4,.zip";
+
+	//检查传入文件是否符合格式，若不符合则不进行上传
+	//Upload回调函数一部分
+	const isAcceptFile = (file:File, accept:any):boolean => {
+		// 检查是否指定了文件类型和是否传入了文件对象
 		if (accept && file) {
+			// 将 accept 转换为数组，如果原本就是数组则保持不变
 			const accepts = Array.isArray(accept)
 				? accept
 				: accept
-					.split(",")
-					.map((x:any) => x.trim())
-					.filter((x:any) => x);
-			const fileExtension = file.name.indexOf(".") > -1 ? file.name.split(".").pop() : "";
+					.split(",")  // 如果是字符串，则按逗号分隔为数组
+					.map((x:any) => x.trim())  // 去除每个元素的首尾空格
+					.filter((x:any) => x);  // 过滤掉空字符串元素
+
+
+			// 获取文件的扩展名
+			const fileExtension = file.name.indexOf(".") > -1 ? "." + file.name.split(".").pop() : "";
+
+			// 检查文件类型是否符合指定的 accept 类型之一
 			return accepts.some((type:any) => {
-				const text = type && type.toLowerCase();
-				const fileType = (file.type || "").toLowerCase();
-				if (text === fileType) {
-					return true;
-				}
-				if (new RegExp("\/\*").test(text)) {
-					const regExp = new RegExp("\/.*$");
-					return fileType.replace(regExp, "") === text.replace(regExp, "");
-				}
-				if (new RegExp("\..*").test(text)) {
-					return text === `.${fileExtension && fileExtension.toLowerCase()}`;
-				}
-				return false;
+				const text = type && type.toLowerCase();  // 将 accept 类型转换为小写
+				return fileExtension?.toLowerCase() === text;
 			});
 		}
+
+		// 如果未指定文件类型或未传入文件对象，则默认为符合条件
 		return !!file;
 	};
 
@@ -172,14 +204,19 @@ function SubmissionCreate()
 											</Input.TextArea>
 										</Form.Item>
 										<Form.Item label={"上传文件"} rules={[{required:true}]}>
-											<Upload  drag  multiple={true} action='/' accept={".jpg,.png,.pdf"} onDrop={(e) => {
-												let uploadFile = e.dataTransfer.files[0];
-												if (isAcceptFile(uploadFile, ".jpg,.png,.pdf")) {
-													return;
-												} else {
-													Message.info("不接受的文件类型，请重新上传指定文件类型~");
-												}
-											}} tip='仅限pdf, png, jpg格式,文件大小不超过50MB'/>
+											<Upload  drag={true}  multiple={true}  action="/http://182.92.67.83:10718/file/postDraftFile" beforeUpload={(file) => {
+												if(file.size <= 50 * 1024 * 1024){
+													if(isAcceptFile(file , acceptFiles)){
+														return true;
+													}else {
+														Message.error("不接受的文件类型捏，请重新上传指定文件类型~");
+														return false;
+													}
+												}else{
+													Message.error("文件大小超出限制捏~");
+													return false;
+												}}
+											} tip={`仅限${acceptFiles}格式    文件大小不超过50MB`}/>
 											<Button type={"primary"} style={{marginTop:15}} >确认提交</Button>
 										</Form.Item>
 									</Form>

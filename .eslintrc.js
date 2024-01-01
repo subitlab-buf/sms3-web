@@ -50,6 +50,7 @@ module.exports = {
 			"always"
 		],
 		"@typescript-eslint/no-unused-vars":["error"],
-		"jsx-a11y/alt-text":0
+		"jsx-a11y/alt-text":0,
+		"array-callback-return": "warn",
 	}
 };

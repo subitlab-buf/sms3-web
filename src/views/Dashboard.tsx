@@ -28,9 +28,9 @@ function Dashboard() {
 		);
 	};
 
-	const [collapsed, setCollapsed] = useState((window.innerWidth <= 768 ? true : false));
+	const [collapsed, setCollapsed] = useState((window.innerWidth <= 768));
 	const [prevWidth, setPrevWidth] = useState(normalWidth);
-	const [logoCollapsed, setLogoCollapsed] = useState((window.innerWidth <= 768 ? true : false));
+	const [logoCollapsed, setLogoCollapsed] = useState((window.innerWidth <= 768));
 	const [siderWidth, setSiderWidth] = useState(normalWidth);
 	const [siderWidthT, setSiderWidthT] = useState(normalWidth);
 	const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -139,6 +139,7 @@ function Dashboard() {
 		if (item.url === lowestPath || (lowestPath === "dashboard" && item.url === "main")) {
 			selectedKey = (item.key);
 		}
+		return null;
 	});
 
 	return (
@@ -161,7 +162,7 @@ function Dashboard() {
 						</div>
 						<Menu mode={"vertical"} defaultSelectedKeys={["1"]} style={{ height: "auto", width: "100%" }} selectedKeys={[selectedKey]}>
 							{myMenuItms.map(item =>
-								<MenuItem key={item.key} className={"menuBtn"} style={(item.key === selectedKey.toString() ? { backgroundColor: "rgb(var(--primary-6))", color: "white", borderRadius: 5 } : { borderRadius: 5 })} onClick={() => { navigate("/dashboard/" + item.url); console.log("/dashboard/" + item.url); }}>{(item.key === selectedKey.toString() ? item.chosenIcon : item.icon)}{item.name}
+								<MenuItem key={item.key} className={"menu-btn"} style={(item.key === selectedKey.toString() ? { backgroundColor: "rgb(var(--primary-6))", color: "white", borderRadius: 5 } : { borderRadius: 5 })} onClick={() => { navigate("/dashboard/" + item.url); console.log("/dashboard/" + item.url); }}>{(item.key === selectedKey.toString() ? item.chosenIcon : item.icon)}{item.name}
 								</MenuItem>)}
 						</Menu>
 					</Grid.Col>
@@ -176,7 +177,7 @@ function Dashboard() {
 				</Grid.Row>
 			</Sider>
 			<Content id="detail" style={{ minWidth: 350, background: "var(--color-neutral-2)", paddingRight: (innerWidth < 576 ? 12 : 0) }}>
-				<Button shape={"round"} size={"large"} style={{ position: "absolute", marginTop: "35vh", width: 20, zIndex: 999, backgroundColor: "var(--color-bg-2)", transform: "translate(-10px,0px)", border: " 2px var(--color-text-4) solid" }} icon={<IconLeft style={{ transform: `rotate(${collapsed ? 180 : 0}deg)` }} />}
+				<Button shape={"round"} size={"large"} style={{ position: "absolute", marginTop: "35vh", width: 20, zIndex: 999, backgroundColor: "var(--color-bg-2)", transform: "translate(-10px,0px)", border: " 2px var(--color-text-4) solid" }} icon={<IconLeft className={`collapse-btn-${(collapsed ? "off" : "on")}`} />}
 					onClick={handleCollapse}></Button>
 				<Outlet />
 			</Content>

@@ -9,7 +9,7 @@ import {
 	Layout,
 	Grid,
 	Link,
-	Steps, Typography, Statistic, Radio, List, Dropdown, Empty
+	Steps, Typography, Statistic, Radio, List, Dropdown, Empty, Message
 } from "@arco-design/web-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
@@ -20,6 +20,7 @@ import {
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuItem = Menu.Item;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,8 +40,115 @@ const links = [
 	{name: "SubIT 社团官网", href:"https://www.bilibili.com/video/BV1yL411K7CP/"},
 	{name: "北大附中o365", href:"https://www.bilibili.com/video/BV1yL411K7CP/"},];
 
-//TODO:获取用户信息user/getInfo
-let userInfo = {
+
+
+
+
+
+const getUserInfo =  async ()  => {
+	try {
+		const token = localStorage.getItem("token");
+		const res = await axios.get("http://182.92.67.83:10718/user/getInfo",{
+			headers:{
+				"Authorization":"Bearer" + token,
+				"Content-Type": "application/json"
+			}
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			return(res);
+		}else{
+			Message.error("获取用户信息失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getUserDrafts =  async ()  => {
+	try {
+		const token = localStorage.getItem("token");
+		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft",{
+			headers:{
+				//TODO:Bearer添加
+				"Authorization":"Bearer" + token,
+				"Content-Type": "application/json"
+			},
+			params:{
+				length:50
+			}
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			return(res);
+		}else if (res.status === 50003){
+			Message.error("获取用户投稿列表失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+};
+
+const getScreens =  async ()  => {
+	try {
+		const res = await axios.get("http://182.92.67.83:10718/screen/getAll",{
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			return(res);
+		}else{
+			Message.error("获取大屏列表失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+};
+
+const getNotices =  async ()  => {
+	try {
+		const token = localStorage.getItem("token");
+		const res = await axios.get("http://182.92.67.83:10718/notice/getAll",{
+			headers:{
+				//TODO:Bearer添加
+				"Authorization":"Bearer" + token,
+				"Content-Type": "application/json"
+			},
+			params:{
+				page:1,
+				length:1
+			}
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			return(res);
+		}else{
+			Message.error("获取通知列表失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+};
+
+
+let userInfo:any = getUserInfo();
+let drafts:any = getUserDrafts();
+let screens:any = getScreens();
+let notices:any = getNotices();
+
+userInfo = {
 	"code": 10000,
 	"message": "success",
 	"data": {
@@ -54,9 +162,7 @@ let userInfo = {
 	"timeStamp": 12345
 };
 
-
-//TODO:获取用户全部投稿
-let drafts = {
+drafts = {
 	"code": 10000,
 	"message": "success",
 	"data": {
@@ -169,16 +275,8 @@ let drafts = {
 	"timeStamp": 1701404345523
 };
 
-let historyDrafts = 0;
-drafts.data.draftInfoList.map(draft => { // @ts-ignore
-	if(draft.status === 1 && draft.permittedEnd < Date.parse(new Date())){
-		historyDrafts += 1;
-	}else {
-		return null;
-	}} );
 
-//TODO:获取全部大屏ID(/screen/getAll)
-let screens = {
+screens = {
 	"code": 0,
 	"message": "string",
 	"data": [
@@ -201,21 +299,167 @@ let screens = {
 	],
 	"timeStamp": 0
 };
+
+notices = {
+	"code": 10000,
+	"message": "success",
+	"data": [
+		{
+			"noticeId": "34db6d9c-29b1-40f3-b608-d27c9e157daa",
+			"title": "test",
+			"content": "欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。",
+			"source": "subit",
+			"createTime": 1701187999999,
+			"files": null
+		},
+		{
+			"noticeId": "74b96e90-4953-4fab-acd7-2571f34ec198",
+			"title": "test",
+			"content": "test",
+			"source": "subit",
+			"createTime": 1701187316861,
+			"files": null
+		},
+		{
+			"noticeId": "b8e49bad-81b7-43de-81cc-21a117ffe4e3",
+			"title": "test",
+			"content": "test",
+			"source": "subit",
+			"createTime": 1701187291471,
+			"files": null
+		}
+	],
+	"timeStamp": 1701187499267
+};
+
 //将screens处理为RadioGroup可传入值
 let screenOptions:any = [];
 let screenContents:any = [];
 for(let i =0; i<screens.data.length; i++){
 	screenOptions.push({value:i,label:screens.data[i].screenId});
-	screenContents.push(getScreenCurrent(screens.data[i].screenId));
+	screenContents.push(getScreenContent(screens.data[i].screenId));
 }
 
+screenContents = [[
+	{
+		"draftId": "string",
+		"title": "string",
+		"content": "string",
+		"description": "string",
+		"startDate": 0,
+		"endDate": 0,
+		"permittedStart": 0,
+		"permittedEnd": 0,
+		"status": 0,
+		"suggestion": "string",
+		"createTime": 0,
+		"auditTime": 0
+	},{
+		"draftId": "string",
+		"title": "string",
+		"content": "string",
+		"description": "string",
+		"startDate": 0,
+		"endDate": 0,
+		"permittedStart": 0,
+		"permittedEnd": 0,
+		"status": 0,
+		"suggestion": "string",
+		"createTime": 0,
+		"auditTime": 0
+	}
+],[
+	{
+		"draftId": "string",
+		"title": "string",
+		"content": "string",
+		"description": "string",
+		"startDate": 0,
+		"endDate": 0,
+		"permittedStart": 0,
+		"permittedEnd": 0,
+		"status": 0,
+		"suggestion": "string",
+		"createTime": 0,
+		"auditTime": 0
+	},{
+		"draftId": "string",
+		"title": "string",
+		"content": "string",
+		"description": "string",
+		"startDate": 0,
+		"endDate": 0,
+		"permittedStart": 0,
+		"permittedEnd": 0,
+		"status": 0,
+		"suggestion": "string",
+		"createTime": 0,
+		"auditTime": 0
+	}
+],[
+	{
+		"draftId": "string",
+		"title": "string",
+		"content": "string",
+		"description": "string",
+		"startDate": 0,
+		"endDate": 0,
+		"permittedStart": 0,
+		"permittedEnd": 0,
+		"status": 0,
+		"suggestion": "string",
+		"createTime": 0,
+		"auditTime": 0
+	},{
+		"draftId": "string",
+		"title": "string",
+		"content": "string",
+		"description": "string",
+		"startDate": 0,
+		"endDate": 0,
+		"permittedStart": 0,
+		"permittedEnd": 0,
+		"status": 0,
+		"suggestion": "string",
+		"createTime": 0,
+		"auditTime": 0
+	}
+]];
 
-function getScreenCurrent(sceenID:any){
+let historyDrafts = 0;
+drafts.data.draftInfoList.map((draft:any) => { // @ts-ignore
+	if(draft.status === 1 && draft.permittedEnd < Date.parse(new Date())){
+		historyDrafts += 1;
+	}
+	return draft;
+} );
 
 
-	console.log(sceenID);
-	//TODO:获取指定大屏投稿内容
-	let exhibiting = {
+async function getScreenContent(srceenID:any){
+	let returnData:any = undefined;
+
+	try {
+		const res = await axios.get("http://182.92.67.83:10718/screen/getDraft",{
+			headers:{
+				"screenId":srceenID,
+				"beginTime":0,
+				"endTime": Number(Date.now())
+			}
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			returnData = res;
+		}else{
+			Message.error("获取大屏展示列表失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+	//TODO:获取指定到大屏投稿
+	returnData = {
 		"code": 0,
 		"message": "string",
 		"data": {
@@ -252,57 +496,22 @@ function getScreenCurrent(sceenID:any){
 		},
 		"timeStamp": 0
 	};
-	if(sceenID !== "大屏1"){
-		return exhibiting.data.draftInfoList;
-	}else {
-		return [
+	return(returnData.data.draftInfoList);
 
-		];
-	}
 }
 
-//获取通知
-let notices = {
-	"code": 10000,
-	"message": "success",
-	"data": [
-		{
-			"noticeId": "34db6d9c-29b1-40f3-b608-d27c9e157daa",
-			"title": "test",
-			"content": "欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。",
-			"source": "subit",
-			"createTime": 1701187999999,
-			"files": null
-		},
-		{
-			"noticeId": "74b96e90-4953-4fab-acd7-2571f34ec198",
-			"title": "test",
-			"content": "test",
-			"source": "subit",
-			"createTime": 1701187316861,
-			"files": null
-		},
-		{
-			"noticeId": "b8e49bad-81b7-43de-81cc-21a117ffe4e3",
-			"title": "test",
-			"content": "test",
-			"source": "subit",
-			"createTime": 1701187291471,
-			"files": null
-		}
-	],
-	"timeStamp": 1701187499267
-};
+
+
 
 //从通知列表获取最新通知
-let exhibitNotice = notices.data.sort((a, b) => b.createTime - a.createTime)[0];
+let displayNotice = notices.data.sort((a:any, b:any) => b.createTime - a.createTime)[0];
 
 
 function MainPage()
 {
 	const  navigate = useNavigate();
 
-	const [exhibitScreen, setExhibitScreen] = useState(0);
+	const [displayScreen, setExhibitScreen] = useState(0);
 	const [spacerSize, setSpacerSize] = useState((window.innerWidth < 768 ? 12 : 24));
 	const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 	const [availableHeight, setAvailableHeight] = useState(window.screen.availHeight);
@@ -520,6 +729,7 @@ function MainPage()
 														</Col>
 													</Row>
 												);}
+												default:return null;
 												}}) :
 												//宽度不够时
 												<Row justify={"space-between"} align={"start"}>
@@ -567,6 +777,7 @@ function MainPage()
 																</Col>
 															</Col>
 														);}
+														default:return null;
 														}})}
 												</Row>)}
 									</div>
@@ -599,14 +810,14 @@ function MainPage()
 										</Typography.Paragraph>
 									</Col>
 									<Col span={16} style={{display:"flex", flexDirection:"column", alignItems:"end"}}>
-										<Radio.Group options={screenOptions} value={exhibitScreen} onChange={(value) => {setExhibitScreen(value);
+										<Radio.Group options={screenOptions} value={displayScreen} onChange={(value) => {setExhibitScreen(value);
 										}} type={"button"} size={"default"} defaultValue={screens.data[0].screenId}>
 										</Radio.Group>
 									</Col>
 								</Row>
 								<Row  style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
 									<List bordered={false} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
-										{screenContents[exhibitScreen].map((draft:any) =>  <List.Item key={draft.title} style={{width:"100%"}}>{ draft.title}</List.Item>)}
+										{screenContents[displayScreen].map((draft:any) => {return(<List.Item key={draft.title} style={{width:"100%"}}>{ draft.title}</List.Item>);})}
 									</List>
 								</Row>
 							</Col>
@@ -638,7 +849,7 @@ function MainPage()
 								<Typography.Paragraph style={{margin:0}}>
 									<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>
 								</Typography.Paragraph>
-								<Typography.Text style={{height:"100%"}}>{exhibitNotice.content}</Typography.Text>
+								<Typography.Text style={{height:"100%"}}>{displayNotice.content}</Typography.Text>
 								<Link href={"mailto:subit@i.pkuschool.edu.cn"}>邮件联系我们<IconRightCircle/></Link>
 							</Col>
 							<Col md={24} xs={12}  style={{
@@ -691,7 +902,7 @@ function MainPage()
 								<Typography.Paragraph style={{margin:0}}>
 									<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>
 								</Typography.Paragraph>
-								<Typography.Text style={{height:"100%"}}>{exhibitNotice.content}</Typography.Text>
+								<Typography.Text style={{height:"100%"}}>{displayNotice.content}</Typography.Text>
 								<Link href={"mailto:subit@i.pkuschool.edu.cn"}>邮件联系我们<IconRightCircle/></Link>
 							</div>
 							<div  style={{

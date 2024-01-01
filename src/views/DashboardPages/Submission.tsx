@@ -35,8 +35,10 @@ const Row = Grid.Row;
 const Col = Grid.Col;
 const Step = Steps.Step;
 
+let userInfo:any = undefined;
+let drafts:any = undefined;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const getUserInfo =  async ()  => {
 	try {
 		const token = localStorage.getItem("token");
@@ -47,19 +49,52 @@ const getUserInfo =  async ()  => {
 			}
 		});
 
-		if(res.status === 200){
+		if(res.status === 10000){
 			console.log(res.data);
+			userInfo = res;
 		}else{
 			Message.error("获取用户信息失败");
 		}
+
 	}catch (error){
 		console.log(error);
-		Message.error("错误");
+		Message.error("获取用户信息失败");
 	}
 };
 
-//TODO:获取用户信息user/getInfo
-let userInfo = {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getUserDrafts =  async ()  => {
+	try {
+		const token = localStorage.getItem("token");
+		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft",{
+			headers:{
+				//TODO:Bearer添加
+				"Authorization":"Bearer" + token,
+				"Content-Type": "application/json"
+			},
+			params:{
+				length:4
+			}
+		});
+
+		if(res.status === 10000){
+			console.log(res.data);
+			drafts = res;
+		}else if (res.status === 50003){
+			Message.error("获取用户投稿列表失败");
+		}
+
+	}catch (error){
+		console.log(error);
+		Message.error("获取用户信息失败");
+	}
+};
+
+
+getUserInfo();
+getUserDrafts();
+
+userInfo = {
 	"code": 10000,
 	"message": "success",
 	"data": {
@@ -73,8 +108,8 @@ let userInfo = {
 	"timeStamp": 12345
 };
 
-//TODO:获取用户全部投稿
-let drafts = {
+
+drafts = {
 	"code": 10000,
 	"message": "success",
 	"data": {
@@ -187,9 +222,8 @@ let drafts = {
 	"timeStamp": 1701404345523
 };
 
-const tempLst = drafts.data.draftInfoList.sort((a, b) => b.createTime - a.createTime).map(draft => {
+const tempLst = drafts.data.draftInfoList.sort((a:any, b:any) => b.createTime - a.createTime).map((draft:any) => {
 	if(draft.createTime >=  Math.floor(Date.now() - 7 * 24 * 60 * 60 * 1000)){
-		console.log(draft);
 		return(draft);
 	}else {
 		//返回一个在map中不会return的特定object
@@ -294,8 +328,7 @@ function Submission()
 							</Typography.Paragraph>
 							<div style={{marginTop:30,paddingLeft:17, paddingRight:17,width:"calc( 493/767 * 100%)"}}>
 								{tempLst.length > 0  &&
-									(innerWidth > 1200  ? tempLst.map(draft => {
-										console.log(draft);
+									(innerWidth > 1200  ? tempLst.map((draft:any) => {
 										// @ts-ignore
 										switch (draft.status){
 										case 2:{

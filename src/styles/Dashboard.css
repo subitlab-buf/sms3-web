@@ -10,31 +10,14 @@
     padding-top:32px;
 }
 
-.menuBtn{
+.menu-btn{
     height: 40px;
-    font-family: "PingFang SC";
-    font-size: 14px;
-    font-weight: 400;
-    color: white;
-    word-wrap: break-word;
 }
 
 .content{
     position: absolute;
 }
 
-.title1 {
-    width: 185px;
-    height: 59px;
-    margin-top: 27px;
-    margin-left: 39.5px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24;
-    color: #1D2129;
-    word-wrap: break-word;
-}
 
 .resizebox-demo-custom-trigger-vertical {
     flex-direction: column;
@@ -47,3 +30,37 @@
     );
 
 }
+
+.collapse-btn-on{
+    transform: rotate(0deg);
+    animation: collapse-btn-on 0.05s;
+}
+
+
+.collapse-btn-off{
+    transform: rotate(180deg);
+    animation: collapse-btn-off 0.05s;
+}
+
+@keyframes collapse-btn-on {
+    from{
+        transform: rotate(180deg);
+    }
+
+    to
+    {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes collapse-btn-off {
+    from{
+        transform: rotate(0deg);
+    }
+
+    to
+    {
+        transform: rotate(180deg);
+    }
+}
+

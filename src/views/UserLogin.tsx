@@ -94,7 +94,7 @@ const UserLogin: React.FC = () => {
 							<Button type="primary" size="large" className="login-forms" onClick={handleSubmit}>
 								登录
 							</Button>
-							<div className={"login-forms"} style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
+							<div className={"login-forms"} style={{display:"flex", flexDirection:"row", justifyContent:"space-around",marginTop:"5%"}}>
 								<Button
 									type={"text"}
 									onClick={()=>{navigate("");}}
