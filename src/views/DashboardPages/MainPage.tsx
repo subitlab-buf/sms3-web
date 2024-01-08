@@ -55,7 +55,7 @@ const getUserInfo =  async ()  => {
 			}
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			return(res);
 		}else{
@@ -83,10 +83,10 @@ const getUserDrafts =  async ()  => {
 			}
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			return(res);
-		}else if (res.status === 50003){
+		}else if (res.data.code === 50003){
 			Message.error("获取用户投稿列表失败");
 		}
 
@@ -101,7 +101,7 @@ const getScreens =  async ()  => {
 		const res = await axios.get("http://182.92.67.83:10718/screen/getAll",{
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			return(res);
 		}else{
@@ -129,7 +129,7 @@ const getNotices =  async ()  => {
 			}
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			return(res);
 		}else{
@@ -447,7 +447,7 @@ async function getScreenContent(srceenID:any){
 			}
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			returnData = res;
 		}else{

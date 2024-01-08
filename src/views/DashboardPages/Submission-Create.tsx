@@ -8,7 +8,7 @@ import {
 	Menu,
 	Layout,
 	Breadcrumb,
-	Grid, Dropdown, Typography, Form, Input, DatePicker, Upload, Message
+	Grid, Dropdown, Typography, Form, Input, DatePicker, Upload, Message, Select, Popconfirm
 } from "@arco-design/web-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
@@ -17,38 +17,47 @@ import {
 import "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import {useNavigate} from "react-router-dom";
+import "resize-observer-polyfill";
 import axios from "axios";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuItem = Menu.Item;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Header = Layout.Header;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Footer = Layout.Footer;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Content = Layout.Content;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BreadcrumbItem = Breadcrumb.Item;
 const Row = Grid.Row;
 const Col = Grid.Col;
 
 
 const getUserInfo =  async ()  => {
-	try {
-		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/user/getInfo",{
-			headers:{
-				"Authorization":"Bearer" + token,
-				"Content-Type": "application/json"
-			}
-		});
-
-		if(res.status === 10000){
+	const token = localStorage.getItem("token");
+	await axios.get("http://182.92.67.83:10718/user/getInfo",{
+		headers:{
+			"Authorization":"Bearer" + token,
+			"Content-Type": "application/json"
+		}
+	}).then(res => {
+		if(res.data.code === 10000){
 			console.log(res.data);
 			return(res);
 		}else{
 			Message.error("获取用户信息失败");
+		}
+	}).catch(error =>{
+		console.log(error);
+		Message.error("获取用户信息失败");
+	});
+};
+
+const getScreens =  async ()  => {
+	try {
+		const res = await axios.get("http://182.92.67.83:10718/screen/getAll",{
+		});
+
+		if(res.data.code === 10000){
+			console.log(res.data);
+			return(res);
+		}else{
+			Message.error("获取大屏列表失败");
 		}
 
 	}catch (error){
@@ -57,7 +66,7 @@ const getUserInfo =  async ()  => {
 	}
 };
 
-
+let screens:any = getScreens();
 let userInfo:any = getUserInfo();
 
 userInfo = {
@@ -74,6 +83,31 @@ userInfo = {
 	"timeStamp": 12345
 };
 
+screens = {
+	"code": 0,
+	"message": "string",
+	"data": [
+		{
+			"screenId": "大屏1",
+			"code": "string",
+			"description": "string",
+			"bindId": 0
+		},{
+			"screenId": "大屏2",
+			"code": "string",
+			"description": "string",
+			"bindId": 0
+		},{
+			"screenId": "大屏3",
+			"code": "string",
+			"description": "string",
+			"bindId": 0
+		}
+	],
+	"timeStamp": 0
+};
+
+const screenOptions = screens.data.map((screen:any) => screen.screenId);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const uploadNewFile = (file:File) => {
 };
@@ -117,6 +151,13 @@ function SubmissionCreate()
 	}, []);
 
 
+	const [title, setTitle] = useState<string>();
+	const [dateRange, setDateRange] = useState<[number, number]>();
+	const [description, setDescription] = useState<string>();
+	const [screenID, setScreenID] = useState<string>();
+	const [fileList,setFileList] = useState<{fileName:any,index:number,originName:string}[]>([{fileName:"111",index:0,originName:"111"}]);
+
+
 	//文件格式要求
 	const acceptFiles = ".jpg,.jpeg,.png,.pdf,.doc,.docx,.ppt,.pptx,.mp4,.zip";
 
@@ -146,6 +187,64 @@ function SubmissionCreate()
 
 		// 如果未指定文件类型或未传入文件对象，则默认为符合条件
 		return !!file;
+	};
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const handleSubmit =  async() => {
+
+		//@ts-ignore
+		if(title !== null && dateRange !== null && screenID != null && description !== null && dateRange[0] > Date.now() && fileList.filter(f => {if (f.fileName !== "uploadFailed"){return f;}}).length >= 1){
+			try {
+				console.log(1);
+
+				const token = localStorage.getItem("token");
+
+				console.log({
+					headers:{
+						"Authorization":"Bearer" + token,
+						"Content-Type": "application/json"
+					},data:{
+						"title": title,
+						// @ts-ignore
+						"startDate": dateRange[0],
+						// @ts-ignore
+						"endDate": dateRange[1],
+						"description": description,
+						"fileName":fileList.filter(f => {if (f.fileName !== "uploadFailed"){return f;}}),
+						"screenId": screenID
+					}
+				});
+
+				axios.post("http://182.92.67.83:10718/draft/create",{
+					headers:{
+						"Authorization":"Bearer" + token,
+						"Content-Type": "application/json"
+					},data:{
+						"title": title,
+						// @ts-ignore
+						"startDate": dateRange[0],
+						// @ts-ignore
+						"endDate": dateRange[1],
+						"description": description,
+						"fileName":fileList.filter(f => {if (f.fileName !== "uploadFailed"){return f;}}),
+						"screenId": screenID
+					}
+				}).then(res => {
+					if(res.data.code === 10000){
+						Message.success("投稿上传成功");
+						navigate("/dashboard/create");
+					}else {
+						Message.error(`投稿上传失败，错误码${res.data.code}`);
+					}
+				}).catch(error =>{
+					Message.error(`投稿上传失败,原因:${error.toString().substring(11)}`);
+				});
+			}catch(error){
+				console.log(error);
+			}
+		}else {
+			Message.error("您尚有任何文件上传成功");
+		}
 	};
 
 
@@ -191,20 +290,69 @@ function SubmissionCreate()
 								</Typography.Paragraph>
 								<Col xl={16} xs={24} sm={24} style={{marginTop:spacerSize,paddingRight:spacerSize}}>
 									<Form autoComplete='off' layout={"horizontal"}>
-										<Form.Item label={"标题"} rules={[{required:true}]} extra={"例：行知学院-xx组-xx活动宣传"}>
-											<Input size={"large"} placeholder={"请输入投稿标题"}></Input>
+										<Form.Item field='标题' label={"标题"} rules={[{required:true}]} extra={"例：行知学院-xx组-xx活动宣传"}>
+											<Input size={"large"} value={title} onChange={value => {setTitle(value);}} placeholder={"请输入投稿标题"}></Input>
 										</Form.Item>
-										<Form.Item label={"申请投放日期"} rules={[{required:true}]} extra={"选择海报投放日期（不超过7天）"}>
-											<DatePicker.RangePicker style={{width:"100%"}}/>
+										<Form.Item  field='大屏'  label={"大屏"} rules={[{required:true}]} extra={"选择你要投放的大屏即可"}>
+											<Select size={"large"} value={screenID} onChange={value => {setScreenID(value);}} placeholder={"请选择投放的大屏"}>
+												{screenOptions.map((s:string) => (<Select.Option value={s} key={s}>{s}</Select.Option>))}
+											</Select>
 										</Form.Item>
-										<Form.Item label={"备注"} extra={"描述投放内容的原因及活动目的。\n" +
+										<Form.Item  field='申请投放日期'  label={"申请投放日期"} rules={[{required:true}]} extra={"选择海报投放日期（不超过7天）"}>
+											<DatePicker.RangePicker value={dateRange} onChange={(value) => { // @ts-ignore
+												setDateRange(value);}} style={{width:"100%"}}/>
+										</Form.Item>
+										<Form.Item field='备注' label={"备注"} rules={[{required:true}]} extra={"描述投放内容的原因及活动目的。\n" +
 											"如投放张数大于两张，或投放时间大于5天，请适当说明。"}>
-											<Input.TextArea>
+											<Input.TextArea value={description} onChange={value => {setDescription(value);}}>
 
 											</Input.TextArea>
 										</Form.Item>
-										<Form.Item label={"上传文件"} rules={[{required:true}]}>
-											<Upload  drag={true}  multiple={true}  action="/http://182.92.67.83:10718/file/postDraftFile" beforeUpload={(file) => {
+										<Form.Item field='文件' label={"上传文件"} rules={[{required:true}]}>
+											<Upload customRequest={(option) => {
+
+												// eslint-disable-next-line @typescript-eslint/no-unused-vars
+												const { onProgress, onError, onSuccess, file } = option;
+												const token = localStorage.getItem("token");
+												const controller = new AbortController();
+
+												const onUploadProgress = (progressEvent: any) => {
+													const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+													onProgress((percentCompleted.toString(),10),progressEvent);
+												};
+
+												axios.post("http://182.92.67.83:10718/file/postDraftFile",{
+													headers:{
+														"Authorization":"Bearer" + token,
+														"Content-Type": "application/json"
+													},data:{
+														"file":file
+													}, onUploadProgress: onUploadProgress
+												}).then(res => {
+													if(res.data.code === 10000){
+														console.log(res.data);
+														setFileList(
+															fileList.concat({fileName:res.data.data,index:fileList.length,originName:file.name}));
+													}else {
+														Message.error("文件发送失败");
+														setFileList(fileList.concat({fileName:"uploadFailed",index:fileList.length,originName:file.name}));
+													}
+												}).catch(error =>{
+													option.onError();
+													setFileList(
+														fileList.concat({fileName:"uploadFailed",index:fileList.length,originName:file.name}));
+												});
+
+												return {
+													abort() {
+														controller.abort();
+														fileList.filter((f) => {if (f.fileName !== file.name){
+															return f;
+														}});
+													}
+												};
+
+											}}  drag={true}  beforeUpload={(file) => {
 												if(file.size <= 50 * 1024 * 1024){
 													if(isAcceptFile(file , acceptFiles)){
 														return true;
@@ -216,10 +364,26 @@ function SubmissionCreate()
 													Message.error("文件大小超出限制捏~");
 													return false;
 												}}
-											} tip={`仅限${acceptFiles}格式    文件大小不超过50MB`}/>
-											<Button type={"primary"} style={{marginTop:15}} >确认提交</Button>
+											} tip={`仅限${acceptFiles}格式    文件大小不超过50MB`}
+											onRemove={(file) => {console.log(file.name);}}/>
+											<Popconfirm
+												title={(fileList.filter(f => {if (f.fileName === "uploadFailed"){return f;}}).length <=0 ? "你确定要上传投稿吗?" : "还有文件尚未上传成功，是否继续提交")}
+												onOk={handleSubmit}
+												onCancel={() => {
+													Message.error({
+														content: "取消提交",
+													});
+												}}
+												focusLock>
+												<Button type={"primary"} style={{marginTop:15}} htmlType='submit'>确认提交</Button></Popconfirm>
 										</Form.Item>
 									</Form>
+								</Col>
+								{
+									//只是用来显示fileList的debug用
+								}
+								<Col span={24} style={{marginTop:spacerSize,paddingRight:spacerSize}}>
+									{fileList.map((f) => <div style={{width:300,borderColor:(f.fileName === "uploadFailed" ? "red" : "rgb(var(--primary-6))"), color:(f.fileName === "uploadFailed" ? "red" : "rgb(var(--primary-6))"), borderWidth:2	,marginTop:10, borderStyle:"solid", borderRadius:10, padding:10}} key={f.index}><div>fileName: {f.fileName}</div><div>originName: {f.originName}</div></div>)}
 								</Col>
 							</Col>
 						</Row>

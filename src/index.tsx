@@ -22,7 +22,7 @@ import SubmissionCreate from "./views/DashboardPages/Submission-Create";
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Login />,
+		element: <Navigate to={"/dashboard"} />,
 		errorElement: <Navigate to="/" />,
 	},{
 		path:"/login",
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
 	},{
 		path:"/dashboard",
 		element:<Dashboard/>,
-		// errorElement: <Navigate to="/" />,
+		errorElement: <Navigate to="/" />,
 		children:[
 			{
 				path:"",

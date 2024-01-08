@@ -49,7 +49,7 @@ const getUserInfo =  async ()  => {
 			}
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			userInfo = res;
 		}else{
@@ -77,10 +77,10 @@ const getUserDrafts =  async ()  => {
 			}
 		});
 
-		if(res.status === 10000){
+		if(res.data.code === 10000){
 			console.log(res.data);
 			drafts = res;
-		}else if (res.status === 50003){
+		}else if (res.data.code === 50003){
 			Message.error("获取用户投稿列表失败");
 		}
 
@@ -222,32 +222,11 @@ drafts = {
 	"timeStamp": 1701404345523
 };
 
-const tempLst = drafts.data.draftInfoList.sort((a:any, b:any) => b.createTime - a.createTime).map((draft:any) => {
-	if(draft.createTime >=  Math.floor(Date.now() - 7 * 24 * 60 * 60 * 1000)){
+const tempLst = drafts.data.draftInfoList.sort((a:any, b:any) => b.createTime - a.createTime).filter((draft:any) => {
+	if(draft.createTime >=  Math.floor(Date.now() - 17 * 24 * 60 * 60 * 1000)){
 		return(draft);
-	}else {
-		//返回一个在map中不会return的特定object
-		return({
-			"draftId": "0",
-			"title": "0",
-			"content": null,
-			"description": "0",
-			"startDate": 0,
-			"endDate": 0,
-			"permittedBegin": 0,
-			"permittedEnd": 0,
-			"status": 3,
-			"suggestion": "0",
-			"screenId": "0",
-			"filesName": [],
-			"sourceId": 0,
-			"createTime": 0,
-			"auditTime": 0
-		});
 	}
 });
-
-
 
 function Submission()
 {
@@ -324,12 +303,14 @@ function Submission()
 						display: "inline-flex"}}>
 						<div style={{width:"100%", height:"100%",paddingLeft:9, paddingRight:9,display:"flex",flexDirection:"column", justifyContent:"space-between",overflow:"hidden"}}>
 							<Typography.Paragraph style={{margin:0,height:24}}>
-								<Typography.Title style={{margin: 0}} heading={6}>7天内{tempLst.length < 0 ? "没有投稿" : `有投稿${tempLst.length}个`}</Typography.Title>
+								<Typography.Title style={{margin: 0}} heading={6}>7天内{tempLst.length < 0 ? "没有投稿" : `有投稿${tempLst.filter((draft:any) => {if(draft.createTime >=  Math.floor(Date.now() - 7 * 24 * 60 * 60 * 1000)){
+									return(draft);}}).length}个`}</Typography.Title>
 							</Typography.Paragraph>
 							<div style={{marginTop:30,paddingLeft:17, paddingRight:17,width:"calc( 493/767 * 100%)"}}>
 								{tempLst.length > 0  &&
 									(innerWidth > 1200  ? tempLst.map((draft:any) => {
 										// @ts-ignore
+										console.log(draft);
 										switch (draft.status){
 										case 2:{
 											return(// @ts-ignore
@@ -383,10 +364,10 @@ function Submission()
 										}}) :
 										//宽度不够时
 										<Row justify={"space-between"} align={"start"}>
-											{tempLst.slice(0,(innerWidth >= 576 ? 3 : 2)).map((draft:any) => {
+											{tempLst.map((draft:any) => {
 												switch (draft.status){
 												case 2:{return(
-													<Col span={7} style={{}} key={draft.title}>
+													<Col span={(innerWidth >= 576 ? 7 : 12)} style={{}} key={draft.title}>
 														<div style={{}}>
 															<Typography.Text ellipsis={{ wrapper: "span" }} >{draft.title}</Typography.Text>
 														</div>
@@ -400,7 +381,7 @@ function Submission()
 													</Col>
 												);}
 												case 1:{return(
-													<Col span={7} style={{}} key={draft.title}>
+													<Col span={(innerWidth >= 576 ? 7 : 12)} style={{}} key={draft.title}>
 														<Col flex={"128px"}>
 															<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
 														</Col>
@@ -414,7 +395,7 @@ function Submission()
 													</Col>
 												);}
 												case 0:{return(
-													<Col span={7} style={{}} key={draft.title}>
+													<Col span={(innerWidth >= 576 ? 7 : 12)} style={{}} key={draft.title}>
 														<Col flex={"128px"}>
 															<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
 														</Col>
