@@ -28,42 +28,12 @@ const Row = Grid.Row;
 const Col = Grid.Col;
 
 
-const getUserInfo =  async ()  => {
-	const token = localStorage.getItem("token");
-	await axios.get("http://182.92.67.83:10718/user/getInfo",{
-		headers:{
-			"Authorization":"Bearer" + token,
-			"Content-Type": "application/json"
-		}
-	}).then(res => {
-		if(res.data.code === 10000){
-			console.log(res.data);
-			return(res);
-		}else{
-			Message.error("获取用户信息失败");
-		}
-	}).catch(error =>{
-		console.log(error);
-		Message.error("获取用户信息失败");
-	});
+const getUserInfo =  () => {
+	// Use sms4-net-front instead.
 };
 
 const getScreens =  async ()  => {
-	try {
-		const res = await axios.get("http://182.92.67.83:10718/screen/getAll",{
-		});
-
-		if(res.data.code === 10000){
-			console.log(res.data);
-			return(res);
-		}else{
-			Message.error("获取大屏列表失败");
-		}
-
-	}catch (error){
-		console.log(error);
-		Message.error("获取用户信息失败");
-	}
+	// Use sms4-net-front instead.
 };
 
 let screens:any = getScreens();
@@ -108,9 +78,7 @@ screens = {
 };
 
 const screenOptions = screens.data.map((screen:any) => screen.screenId);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const uploadNewFile = (file:File) => {
-};
+// const uploadNewFile = (file:File) => {};
 
 function SubmissionCreate()
 {
