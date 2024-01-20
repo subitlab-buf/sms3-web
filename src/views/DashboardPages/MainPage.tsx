@@ -45,108 +45,121 @@ const links = [
 
 
 
-const getUserInfo =  async ()  => {
+const getUserInfo = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/user/getInfo",{
-			headers:{
-				"Authorization":"Bearer" + token,
+		const res = await axios.get("http://182.92.67.83:10718/user/getInfo", {
+			headers: {
+				"Authorization": "Bearer" + token,
 				"Content-Type": "application/json"
 			}
 		});
 
-		if(res.data.code === 10000){
+		if (res.data.code === 10000) {
 			console.log(res.data);
-			return(res);
-		}else{
-			Message.error("获取用户信息失败");
+			return res;
+		} else {
+			throw new Error("获取用户信息失败");
 		}
 
-	}catch (error){
+	} catch (error) {
 		console.log(error);
-		Message.error("获取用户信息失败");
+		throw error;
 	}
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getUserDrafts =  async ()  => {
+const getUserDrafts = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft",{
-			headers:{
-				//TODO:Bearer添加
-				"Authorization":"Bearer" + token,
+		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft", {
+			headers: {
+				"Authorization": "Bearer" + token,
 				"Content-Type": "application/json"
 			},
-			params:{
-				length:50
+			params: {
+				length: 50
 			}
 		});
 
-		if(res.data.code === 10000){
+		if (res.data.code === 10000) {
 			console.log(res.data);
-			return(res);
-		}else if (res.data.code === 50003){
-			Message.error("获取用户投稿列表失败");
+			return res;
+		} else if (res.data.code === 50003) {
+			throw new Error("获取用户投稿列表失败");
 		}
 
-	}catch (error){
+	} catch (error) {
 		console.log(error);
-		Message.error("获取用户信息失败");
+		throw error;
 	}
 };
 
-const getScreens =  async ()  => {
+const getScreens = async () => {
 	try {
-		const res = await axios.get("http://182.92.67.83:10718/screen/getAll",{
-		});
+		const res = await axios.get("http://182.92.67.83:10718/screen/getAll", {});
 
-		if(res.data.code === 10000){
+		if (res.data.code === 10000) {
 			console.log(res.data);
-			return(res);
-		}else{
-			Message.error("获取大屏列表失败");
+			return res;
+		} else {
+			throw new Error("获取大屏列表失败");
 		}
 
-	}catch (error){
+	} catch (error) {
 		console.log(error);
-		Message.error("获取用户信息失败");
+		throw error;
 	}
 };
 
-const getNotices =  async ()  => {
+const getNotices = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/notice/getAll",{
-			headers:{
-				//TODO:Bearer添加
-				"Authorization":"Bearer" + token,
+		const res = await axios.get("http://182.92.67.83:10718/notice/getAll", {
+			headers: {
+				"Authorization": "Bearer" + token,
 				"Content-Type": "application/json"
 			},
-			params:{
-				page:1,
-				length:1
+			params: {
+				page: 1,
+				length: 1
 			}
 		});
 
-		if(res.data.code === 10000){
+		if (res.data.code === 10000) {
 			console.log(res.data);
-			return(res);
-		}else{
-			Message.error("获取通知列表失败");
+			return res;
+		} else {
+			throw new Error("获取通知列表失败");
 		}
 
-	}catch (error){
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+};
+
+
+let userInfo: any;
+let drafts: any;
+let screens: any;
+let notices: any;
+
+const handleErrors = async () => {
+	try {
+		userInfo = await getUserInfo();
+		drafts = await getUserDrafts();
+		screens = await getScreens();
+		notices = await getNotices();
+
+	} catch (error) {
 		console.log(error);
 		Message.error("获取用户信息失败");
 	}
 };
 
-
-let userInfo:any = getUserInfo();
-let drafts:any = getUserDrafts();
-let screens:any = getScreens();
-let notices:any = getNotices();
+// 调用函数
+handleErrors();
 
 userInfo = {
 	"code": 10000,
@@ -451,12 +464,11 @@ async function getScreenContent(srceenID:any){
 			console.log(res.data);
 			returnData = res;
 		}else{
-			Message.error("获取大屏展示列表失败");
+			throw new Error(res.data.message);
 		}
 
 	}catch (error){
 		console.log(error);
-		Message.error("获取用户信息失败");
 	}
 	//TODO:获取指定到大屏投稿
 	returnData = {
@@ -499,7 +511,6 @@ async function getScreenContent(srceenID:any){
 	return(returnData.data.draftInfoList);
 
 }
-
 
 
 

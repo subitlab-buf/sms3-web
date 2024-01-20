@@ -9,6 +9,7 @@ import {
 	Layout,
 	Breadcrumb,
 	Grid,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	Link, Typography, Dropdown, Steps, Message
 } from "@arco-design/web-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,64 +36,76 @@ const Row = Grid.Row;
 const Col = Grid.Col;
 const Step = Steps.Step;
 
-let userInfo:any = undefined;
-let drafts:any = undefined;
+let userInfo: any = undefined;
+let drafts: any = undefined;
 
-
-const getUserInfo =  async ()  => {
+const getUserInfo = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/user/getInfo",{
-			headers:{
-				"Authorization":"Bearer" + token,
+		const res = await axios.get("http://182.92.67.83:10718/user/getInfo", {
+			headers: {
+				"Authorization": "Bearer" + token,
 				"Content-Type": "application/json"
 			}
 		});
 
-		if(res.data.code === 10000){
+		if (res.data.code === 10000) {
 			console.log(res.data);
 			userInfo = res;
-		}else{
-			Message.error("获取用户信息失败");
+		} else {
+			throw new Error("获取用户信息失败");
 		}
 
-	}catch (error){
+	} catch (error) {
 		console.log(error);
-		Message.error("获取用户信息失败");
+		throw error;
 	}
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getUserDrafts =  async ()  => {
+const getUserDrafts = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft",{
-			headers:{
+		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft", {
+			headers: {
 				//TODO:Bearer添加
-				"Authorization":"Bearer" + token,
+				"Authorization": "Bearer" + token,
 				"Content-Type": "application/json"
 			},
-			params:{
-				length:4
+			params: {
+				length: 4
 			}
 		});
 
-		if(res.data.code === 10000){
+		if (res.data.code === 10000) {
 			console.log(res.data);
 			drafts = res;
-		}else if (res.data.code === 50003){
-			Message.error("获取用户投稿列表失败");
+		} else if (res.data.code === 50003) {
+			throw new Error("获取用户投稿列表失败");
 		}
 
-	}catch (error){
+	} catch (error) {
 		console.log(error);
-		Message.error("获取用户信息失败");
+		throw error;
 	}
 };
 
+const handleErrors = async () => {
+	try {
+		await getUserInfo();
+		await getUserDrafts();
 
-getUserInfo();
-getUserDrafts();
+		// 处理所有请求成功的情况
+
+	} catch (error) {
+		// 处理所有请求失败的情况
+		console.log(error);
+		//Message.error("获取用户信息失败");
+	}
+};
+
+// 调用函数
+handleErrors();
 
 userInfo = {
 	"code": 10000,

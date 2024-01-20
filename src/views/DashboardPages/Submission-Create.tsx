@@ -40,11 +40,11 @@ const getUserInfo =  async ()  => {
 			console.log(res.data);
 			return(res);
 		}else{
-			Message.error("获取用户信息失败");
+			//Message.error("获取用户信息失败");
 		}
 	}).catch(error =>{
 		console.log(error);
-		Message.error("获取用户信息失败");
+		//Message.error("获取用户信息失败");
 	});
 };
 
@@ -57,12 +57,12 @@ const getScreens =  async ()  => {
 			console.log(res.data);
 			return(res);
 		}else{
-			Message.error("获取大屏列表失败");
+			//Message.error("获取大屏列表失败");
 		}
 
 	}catch (error){
 		console.log(error);
-		Message.error("获取用户信息失败");
+		//Message.error("获取用户信息失败");
 	}
 };
 
@@ -334,10 +334,11 @@ function SubmissionCreate()
 														setFileList(
 															fileList.concat({fileName:res.data.data,index:fileList.length,originName:file.name}));
 													}else {
-														Message.error("文件发送失败");
+														Message.error("文件上传失败");
 														setFileList(fileList.concat({fileName:"uploadFailed",index:fileList.length,originName:file.name}));
 													}
 												}).catch(error =>{
+													Message.error("文件上传失败");
 													option.onError();
 													setFileList(
 														fileList.concat({fileName:"uploadFailed",index:fileList.length,originName:file.name}));
@@ -383,6 +384,10 @@ function SubmissionCreate()
 									//只是用来显示fileList的debug用
 								}
 								<Col span={24} style={{marginTop:spacerSize,paddingRight:spacerSize}}>
+									{
+										//TODO:删除开发测试使用部分
+									}
+									<div>以下部分仅为开发期间测试时显示用</div>
 									{fileList.map((f) => <div style={{width:300,borderColor:(f.fileName === "uploadFailed" ? "red" : "rgb(var(--primary-6))"), color:(f.fileName === "uploadFailed" ? "red" : "rgb(var(--primary-6))"), borderWidth:2	,marginTop:10, borderStyle:"solid", borderRadius:10, padding:10}} key={f.index}><div>fileName: {f.fileName}</div><div>originName: {f.originName}</div></div>)}
 								</Col>
 							</Col>
