@@ -9,6 +9,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.16.0",
+		"sms4-net-front": "github:subitlab-buf/sms4-net-front",
 		"typescript": "^4.9.5",
 		"web-vitals": "^2.1.4"
 	},
