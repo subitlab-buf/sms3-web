@@ -154,7 +154,11 @@ const handleErrors = async () => {
 
 	} catch (error) {
 		console.log(error);
-		Message.error("获取用户信息失败");
+		let token = localStorage.getItem("token");
+		console.log(token);
+		if(token !== "" && token !== null){
+			Message.error("获取用户信息失败");
+		}
 	}
 };
 
@@ -320,7 +324,7 @@ notices = {
 		{
 			"noticeId": "34db6d9c-29b1-40f3-b608-d27c9e157daa",
 			"title": "test",
-			"content": "欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。",
+			"content": "欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。"+"欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。欢迎使用SubIT大屏管理系统！投稿前可查看大屏使用指南。",
 			"source": "subit",
 			"createTime": 1701187999999,
 			"files": null
@@ -797,7 +801,7 @@ function MainPage()
 									</div>
 								</div>
 							</Col>
-							<Col style={{height:0.26*(availableHeight-74),
+							<Col style={{height:0.25*(availableHeight-74),
 								marginTop:spacerSize,
 								paddingTop: 17,
 								paddingBottom: 17,
@@ -814,7 +818,13 @@ function MainPage()
 								display: "inline-flex",
 								minHeight:174
 							}}>
-								<Row style={{width:"100%", height:24,marginBottom:17,display:"inline-flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
+								<Row style={{width:"100%",
+									height:24,
+									marginBottom:17,
+									display:"inline-flex",
+									alignItems:"center",
+									justifyContent:"center",
+									flexDirection:"column"}}>
 									<Col span={8} style={{display:"flex", flexDirection:"column", alignItems:"start"}}>
 										<Typography.Paragraph style={{margin:0}}>
 											<Typography.Title  style={{margin: 0}} heading={6}>当前播放列表</Typography.Title>
@@ -837,6 +847,7 @@ function MainPage()
 					{/*
 					以上为左侧栏，以下为右侧栏
 					*/}
+
 					{innerWidth >= 768 ?
 						<Col md={7} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize} : {paddingLeft:spacerSize}))}>
 							<Col md={24} xs={12} style={{
@@ -860,12 +871,11 @@ function MainPage()
 								<Typography.Paragraph style={{margin:0}}>
 									<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>
 								</Typography.Paragraph>
-								<Typography.Text style={{height:"100%"}}>{displayNotice.content}</Typography.Text>
-								<Link href={"mailto:subit@i.pkuschool.edu.cn"}>邮件联系我们<IconRightCircle/></Link>
+								<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows: 5}}>{displayNotice.content}</Typography.Text>
+								<Link href={"mailto:subit@i.pkuschool.edu.cn"} style={{flex:1,alignItems:"flex-end",display:"flex"}}>邮件联系我们<IconRightCircle/></Link>
 							</Col>
 							<Col md={24} xs={12}  style={{
 								float:"right",
-								height:0.35125*(availableHeight-74),
 								marginTop:17,
 								paddingTop: 21,
 								paddingBottom: 23,
@@ -880,7 +890,6 @@ function MainPage()
 								alignItems: "flex-start",
 								gap: 17,
 								display: "inline-flex",
-								minHeight:243
 							}}>
 								<Space  direction={"vertical"} style={{display:"flex",flexDirection:"column", alignItems:"flex-start",height:"100%",justifyContent:"start"}}>
 									<Typography.Paragraph style={{margin:0}}>
@@ -894,7 +903,6 @@ function MainPage()
 						<Col md={7} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize, paddingTop:spacerSize} : {paddingLeft:24}))}>
 							<div style={{
 								width:`calc(50% - ${24 + spacerSize}px)`,
-								height:0.35125*(availableHeight-74),
 								paddingTop: 21,
 								paddingBottom: 25,
 								paddingLeft: 12,
@@ -908,18 +916,18 @@ function MainPage()
 								alignItems: "flex-start",
 								gap: 17,
 								display: "inline-flex",
-								minHeight:243
+								minHeight:243,
 							}}>
 								<Typography.Paragraph style={{margin:0}}>
 									<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>
 								</Typography.Paragraph>
-								<Typography.Text style={{height:"100%"}}>{displayNotice.content}</Typography.Text>
-								<Link href={"mailto:subit@i.pkuschool.edu.cn"}>邮件联系我们<IconRightCircle/></Link>
+								<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows: 5}}>{displayNotice.content}</Typography.Text>
+								<Link href={"mailto:subit@i.pkuschool.edu.cn"} style={{flex:1,alignItems:"flex-end",display:"flex"}}>邮件联系我们<IconRightCircle/></Link>
 							</div>
 							<div  style={{
 								float:"right",
 								width:`calc(50% - ${24 + spacerSize}px)`,
-								height:0.35125*(availableHeight-74),
+								minHeight:243,
 								paddingTop: 21,
 								paddingBottom: 23,
 								paddingLeft: 12,
@@ -932,8 +940,7 @@ function MainPage()
 								justifyContent: "flex-start",
 								alignItems: "flex-start",
 								gap: 17,
-								display: "inline-flex",
-								minHeight:243
+								display: "inline-flex"
 							}}>
 								<Space  direction={"vertical"} style={{display:"flex",flexDirection:"column", alignItems:"flex-start",height:"100%",justifyContent:"start"}}>
 									<Typography.Paragraph style={{margin:0}}>

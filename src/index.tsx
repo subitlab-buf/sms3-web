@@ -16,6 +16,7 @@ import Register from "./views/Register";
 import MainPage from "./views/DashboardPages/MainPage";
 import Submission from "./views/DashboardPages/Submission";
 import SubmissionCreate from "./views/DashboardPages/Submission-Create";
+import HistoryDrafts from "./views/DashboardPages/History";
 
 
 
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
 				}]
 			},{
 				path:"history",
-				element:<MainPage />,
+				element:<HistoryDrafts />,
 			},{
 				path:"userinfo",
 				element:<MainPage />,

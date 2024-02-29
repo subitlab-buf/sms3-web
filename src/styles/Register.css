@@ -112,11 +112,13 @@
 
 .btn-show{
     opacity: 1;
+    transition: opacity 0.5s;
     animation: btn-show ;
 }
 
 .btn-fade{
     opacity: 0;
+    transition: opacity 0.5s;
     animation: btn-show ;
 }
 

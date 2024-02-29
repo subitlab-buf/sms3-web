@@ -65,7 +65,7 @@ function Dashboard() {
 
 
 	// @ts-ignore
-	const handleMoving = (_: any, { width }) => {
+	const handleResizing = (_: any, { width }) => {
 		if (width > collapsedWidth) {
 			setSiderWidth(width);
 			setSiderWidthT(width);
@@ -145,7 +145,7 @@ function Dashboard() {
 
 	return (
 		<Layout className='container2' style={{ height: "100vh", backgroundColor: "var(--color-neutral-2)" }}>
-			<Sider trigger={null} collapsible onCollapse={onCollapse} collapsed={collapsed} width={siderWidth} resizeBoxProps={{ directions: ["right"], onMoving: handleMoving, resizeTriggers: { right: <TriggerContent className='resizebox-demo-custom-trigger-vertical' /> } }} style={{ minWidth: collapsedWidth, overflow: "hidden", maxWidth: maxWidth }}>
+			<Sider trigger={null} collapsible onCollapse={onCollapse} collapsed={collapsed} width={siderWidth} resizeBoxProps={{ directions: ["right"], onMoving: handleResizing, resizeTriggers: { right: <TriggerContent className='resizebox-demo-custom-trigger-vertical' /> } }} style={{ minWidth: collapsedWidth, overflow: "hidden", maxWidth: maxWidth }}>
 				<div style={{ height: "50%" }}>
 
 					<Grid.Col>
@@ -177,7 +177,10 @@ function Dashboard() {
 					</Grid.Col>
 				</Grid.Row>
 			</Sider>
-			<Content id="detail" style={{ minWidth: 350, background: "var(--color-neutral-2)", paddingRight: (innerWidth < 576 ? 12 : 0) }}>
+			{
+				//设计不知道从哪里搞来的配色，本来用的是，var(--color-neutral-2)，但是设计的#F5F6FA在设计色板上找不到，暂且先填上去
+			}
+			<Content id="detail" style={{ minWidth: 350, background: "#F5F6FA", paddingRight: (innerWidth < 576 ? 12 : 0) }}>
 				<Button shape={"round"} size={"large"} style={{ position: "absolute", marginTop: "35vh", width: 20, zIndex: 999, backgroundColor: "var(--color-bg-2)", transform: "translate(-10px,0px)", border: " 2px var(--color-text-4) solid" }} icon={<IconLeft className={`collapse-btn-${(collapsed ? "off" : "on")}`} />}
 					onClick={handleCollapse}></Button>
 				<Outlet />

@@ -66,14 +66,15 @@ const getUserInfo = async () => {
 const getUserDrafts = async () => {
 	try {
 		const token = localStorage.getItem("token");
-		const res = await axios.get("http://182.92.67.83:10718/draft/getDraft", {
+		const res = await axios.get("http://182.92.67.83:10718/draft/getShownDraft", {
 			headers: {
 				//TODO:Bearer添加
 				"Authorization": "Bearer" + token,
 				"Content-Type": "application/json"
 			},
 			params: {
-				length: 4
+				beginTime:new Date().getTime(),
+				endTIme:(new Date(Date.now() - 7 * 24 * 3600 * 1000)).getTime()
 			}
 		});
 
@@ -142,7 +143,7 @@ drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1703840592989,
+				"createTime": new Date().getTime(),
 				"auditTime": 1701402846751
 			},
 			{
@@ -159,7 +160,7 @@ drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1703840592988,
+				"createTime": new Date().getTime(),
 				"auditTime": 1701402847057
 			},
 			{
@@ -176,7 +177,7 @@ drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1703840592987,
+				"createTime": new Date().getTime(),
 				"auditTime": 1701402847317
 			},
 			{
@@ -193,7 +194,7 @@ drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1703840592989,
+				"createTime": new Date().getTime(),
 				"auditTime": 1701402847823
 			},
 			{
@@ -210,7 +211,7 @@ drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1703840592989,
+				"createTime": new Date().getTime(),
 				"auditTime": 1701402847566
 			},
 			{
@@ -227,7 +228,7 @@ drafts = {
 				"screenId": "default",
 				"filesName": [],
 				"sourceId": 1,
-				"createTime": 1703840592989,
+				"createTime": new Date().getTime(),
 				"auditTime": 1701402892176
 			}
 		]
@@ -236,7 +237,7 @@ drafts = {
 };
 
 const tempLst = drafts.data.draftInfoList.sort((a:any, b:any) => b.createTime - a.createTime).filter((draft:any) => {
-	if(draft.createTime >=  Math.floor(Date.now() - 17 * 24 * 60 * 60 * 1000)){
+	if(draft.createTime >=  (new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).getTime()){
 		return(draft);
 	}
 });
