@@ -117,7 +117,6 @@ function SubmissionCreate()
 	const  navigate = useNavigate();
 	const [spacerSize, setSpacerSize] = useState((window.innerWidth < 768 ? 12 : 24));
 	const [availableHeight, setAvailableHeight] = useState(window.screen.availHeight);
-	const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
 
 	const dropList = <Menu>
@@ -137,7 +136,6 @@ function SubmissionCreate()
 	useEffect(() => {
 		const handleResize = () => {
 			setAvailableHeight(window.screen.availHeight);
-			setInnerWidth(window.innerWidth);
 			setSpacerSize((window.innerWidth < 768 ? 12 : 24));
 		};
 
@@ -253,7 +251,7 @@ function SubmissionCreate()
 		<Layout>
 			<Header style={{height:109/800*(availableHeight-74),width:"100%",minHeight:109}}>
 				<Row style={{height:"100%",display:"flex",flexDirection:"row",overflow:"hidden"}} justify={"space-between"}>
-					<Col flex={`${(innerWidth<768 ? innerWidth - 200 : 300)}px`} style={{height:"100%",display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
+					<Col  span={12} style={{height:"100%",minWidth:225,display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
 						<Breadcrumb style={{paddingLeft:spacerSize,paddingBottom:spacerSize}}>
 							{breadCrumbs.map((item:any) => <BreadcrumbItem key={item.content} onClick={() => {navigate(item.navigate);}}>{item.icon}{item.content}</BreadcrumbItem>)}
 						</Breadcrumb>

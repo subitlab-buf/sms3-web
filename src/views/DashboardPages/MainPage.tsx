@@ -57,7 +57,7 @@ const getUserInfo = async () => {
 
 		if (res.data.code === 10000) {
 			console.log(res.data);
-			return res;
+			userInfo = res;
 		} else {
 			throw new Error("获取用户信息失败");
 		}
@@ -67,6 +67,7 @@ const getUserInfo = async () => {
 		throw error;
 	}
 };
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getUserDrafts = async () => {
@@ -84,7 +85,7 @@ const getUserDrafts = async () => {
 
 		if (res.data.code === 10000) {
 			console.log(res.data);
-			return res;
+			drafts = res;
 		} else if (res.data.code === 50003) {
 			throw new Error("获取用户投稿列表失败");
 		}
@@ -101,7 +102,7 @@ const getScreens = async () => {
 
 		if (res.data.code === 10000) {
 			console.log(res.data);
-			return res;
+			screens = res;
 		} else {
 			throw new Error("获取大屏列表失败");
 		}
@@ -128,7 +129,7 @@ const getNotices = async () => {
 
 		if (res.data.code === 10000) {
 			console.log(res.data);
-			return res;
+			notices = res;
 		} else {
 			throw new Error("获取通知列表失败");
 		}
@@ -145,12 +146,12 @@ let drafts: any;
 let screens: any;
 let notices: any;
 
-const handleErrors = async () => {
+const dataRequest = async () => {
 	try {
-		userInfo = await getUserInfo();
-		drafts = await getUserDrafts();
-		screens = await getScreens();
-		notices = await getNotices();
+		await getUserInfo();
+		await getUserDrafts();
+		await getScreens();
+		await getNotices();
 
 	} catch (error) {
 		console.log(error);
@@ -163,7 +164,7 @@ const handleErrors = async () => {
 };
 
 // 调用函数
-handleErrors();
+dataRequest();
 
 userInfo = {
 	"code": 10000,
@@ -539,8 +540,11 @@ function MainPage()
 			setSpacerSize((window.innerWidth < 768 ? 12 : 24));
 		};
 
+		handleResize();
+
 		// 在组件挂载时添加窗口大小改变事件监听器
 		window.addEventListener("resize", handleResize);
+		console.log(innerWidth);
 
 		// 清除事件监听器，防止内存泄漏
 		return () => {
@@ -559,14 +563,14 @@ function MainPage()
 	return (
 		<Layout>
 			<Header style={{height:109/800*(availableHeight-74),width:"100%",minHeight:109}}>
-				<Row style={{height:"100%",display:"flex",flexDirection:"row",overflow:"hidden"}} justify={"space-between"}>
-					<Col flex={`${(innerWidth<768 ? innerWidth - 200 : 300)}px`} style={{height:"100%",display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
+				<Row style={{height:"100%",display:"flex",flexDirection:"row"}} justify={"space-between"}>
+					<Col  span={12} style={{height:"100%",minWidth:225,display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
 						<div style={{marginBottom:16, paddingLeft:spacerSize, flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", gap: 4, display: "inline-flex"}}>
 							<Typography.Title heading={6}>工作台</Typography.Title>
 							<Typography.Text type={"secondary"}>下午好，{userInfo.data.realName}。欢迎使用SubIT大屏系统。</Typography.Text>
 						</div>
 					</Col>
-					<Col flex={"120px"} style={{height:"100%",display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"start"}}>
+					<Col flex={"120px"} style={{height:"100%",width:120,display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"start"}}>
 						<div style={{height:32,display:"flex",flexDirection:"row",alignItems:"center",width:"100%"}}>
 							<IconQuestionCircle fontSize={24}/>
 							<Dropdown position={"br"} droplist={dropList} trigger={"hover"}>
@@ -578,102 +582,144 @@ function MainPage()
 			</Header>
 			<Content style={{width:"100%"}}>
 				<Row justify={"start"} align={"start"}>
-					<Col md={14} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize} : {paddingLeft:spacerSize}))}>
-						<Row>
-							{innerWidth >= 768 ?
-								<Col span={24}>
-									<div  style={{
-										width:`calc(50% - ${spacerSize}px)`,
-										float:"left",
-										overflow:"hidden",
-										height:0.1575*(availableHeight-74),
-										padding: 5,
-										background: "var(--color-bg-2)",
-										boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
-										borderRadius: 8,
-										flexDirection: "column",
-										justifyContent: "flex-start",
-										alignItems: "flex-start",
-										display: "inline-flex",
-										minHeight:126
-									}}>
-										<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
-											<Typography.Paragraph style={{margin:0}}>
-												<Typography.Title  style={{margin: 0}} heading={6}>新增一条投稿</Typography.Title>
-											</Typography.Paragraph>
-											<Button type={"primary"} size={"large"} style={{marginTop:8,width:116}} onClick={() => {navigate("/dashboard/submission/create");}}><IconPlus/>立即投稿</Button>
-											<Typography.Text type={"secondary"} style={{width:"80%"}}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>
+					<Col md={14} sm={24} style={((innerWidth<768 ? {width:"100%",paddingLeft:spacerSize,paddingBottom:16} : {width:"100%",paddingLeft:spacerSize}))}>
+						<Row style={{width:"100%"}}>
+							<Grid cols={{xs:1, sm:1, md:2}} colGap={spacerSize} rowGap={spacerSize} style={{width:"100%"}}>
+								<Grid.GridItem  style={{
+									overflow:"hidden",
+									height:0.1575*(availableHeight-74),
+									background: "var(--color-bg-2)",
+									boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
+									borderRadius: 8,
+									flexDirection: "column",
+									justifyContent: "flex-start",
+									alignItems: "flex-start",
+									display: "inline-flex",
+									minHeight:126
+								}}>
+									<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
+										<Typography.Paragraph style={{margin:0}}>
+											<Typography.Title  style={{margin: 0}} heading={6}>新增一条投稿</Typography.Title>
+										</Typography.Paragraph>
+										<Button type={"primary"} size={"large"} style={{marginTop:8,width:116}} onClick={() => {navigate("/dashboard/submission/create");}}><IconPlus/>立即投稿</Button>
+										<Typography.Text type={"secondary"} style={{width:"90%",marginTop:8,marginBottom:5}} ellipsis={{rows:1}}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>
+									</div>
+								</Grid.GridItem>
+								<Grid.GridItem style={{
+									height:0.1575*(availableHeight-74),
+									background: "var(--color-bg-2)",
+									boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
+									borderRadius: 8,
+									flexDirection: "column",
+									justifyContent: "flex-start",
+									alignItems: "flex-start",
+									display: "inline-flex",
+									minHeight:126
+								}}>
+									<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
+										<Statistic title={"历史投稿（已结束）"} countUp value={historyDrafts.toString()} prefix={<IconHistory/>} suffix={<Typography.Text type={"secondary"}>已结束播放</Typography.Text>}></Statistic>
+										<div style={{marginTop: 10}}>
+											<Link onClick={() => {navigate("/dashboard/history");}}>去历史投稿<IconRightCircle/></Link>
 										</div>
 									</div>
-									<div style={{
-										width:`calc(50% - ${spacerSize}px)`,
-										float:"right",
-										height:0.1575*(availableHeight-74),
-										padding: 5,
-										background: "var(--color-bg-2)",
-										boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
-										borderRadius: 8,
-										flexDirection: "column",
-										justifyContent: "flex-start",
-										alignItems: "flex-start",
-										display: "inline-flex",
-										minHeight:126
-									}}>
-										<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
-											<Statistic title={"历史投稿（已结束）"} countUp value={historyDrafts.toString()} prefix={<IconHistory/>} suffix={<Typography.Text type={"secondary"}>已结束播放</Typography.Text>}></Statistic>
-											<div style={{marginTop: 10}}>
-												<Link onClick={() => {navigate("/dashboard/history");}}>去历史投稿<IconRightCircle/></Link>
-											</div>
-										</div>
-									</div>
-								</Col>
-								:
-								<Col span={24}>
-									<Col span={24}  style={{
-										float:"left",
-										overflow:"hidden",
-										height:0.1575*(availableHeight-74),
-										padding: 5,
-										background: "var(--color-bg-2)",
-										boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
-										borderRadius: 8,
-										flexDirection: "column",
-										justifyContent: "flex-start",
-										alignItems: "flex-start",
-										display: "inline-flex",
-										minHeight:126
-									}}>
-										<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
-											<Typography.Paragraph style={{margin:0}}>
-												<Typography.Title  style={{margin: 0}} heading={6}>新增一条投稿</Typography.Title>
-											</Typography.Paragraph>
-											<Button type={"primary"} size={"large"} style={{marginTop:8,width:116}} onClick={() => {navigate("/dashboard/submission/create");}}>立即投稿</Button>
-											<Typography.Text type={"secondary"}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>
-										</div>
-									</Col>
-									<Col span={24} style={{
-										marginTop:spacerSize,
-										float:"right",
-										height:0.1575*(availableHeight-74),
-										padding: 5,
-										background: "var(--color-bg-2)",
-										boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
-										borderRadius: 8,
-										flexDirection: "column",
-										justifyContent: "flex-start",
-										alignItems: "flex-start",
-										display: "inline-flex",
-										minHeight:126
-									}}>
-										<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
-											<Statistic title={"历史投稿（已结束）"} countUp value={historyDrafts.toString()} prefix={<IconHistory/>} suffix={<Typography.Text type={"secondary"}>已结束播放</Typography.Text>}></Statistic>
-											<div style={{marginTop: 10}}>
-												<Link onClick={() => {navigate("/dashboard/history");}}>去历史投稿<IconRightCircle/></Link>
-											</div>
-										</div>
-									</Col>
-								</Col>
-							}
+								</Grid.GridItem>
+							</Grid>
+
+							{/* 屎山老版本，暂时先留着，看有没有问题 */}
+							{/*{innerWidth >= 768 ?*/}
+							{/*	<Col span={24}>*/}
+							{/*		<div  style={{*/}
+							{/*			width:`calc(50% - ${spacerSize}px)`,*/}
+							{/*			float:"left",*/}
+							{/*			overflow:"hidden",*/}
+							{/*			height:0.1575*(availableHeight-74),*/}
+							{/*			padding: 5,*/}
+							{/*			background: "var(--color-bg-2)",*/}
+							{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+							{/*			borderRadius: 8,*/}
+							{/*			flexDirection: "column",*/}
+							{/*			justifyContent: "flex-start",*/}
+							{/*			alignItems: "flex-start",*/}
+							{/*			display: "inline-flex",*/}
+							{/*			minHeight:126*/}
+							{/*		}}>*/}
+							{/*			<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>*/}
+							{/*				<Typography.Paragraph style={{margin:0}}>*/}
+							{/*					<Typography.Title  style={{margin: 0}} heading={6}>新增一条投稿</Typography.Title>*/}
+							{/*				</Typography.Paragraph>*/}
+							{/*				<Button type={"primary"} size={"large"} style={{marginTop:8,width:116}} onClick={() => {navigate("/dashboard/submission/create");}}><IconPlus/>立即投稿</Button>*/}
+							{/*				<Typography.Text type={"secondary"} style={{width:"80%"}}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>*/}
+							{/*			</div>*/}
+							{/*		</div>*/}
+							{/*		<div style={{*/}
+							{/*			width:`calc(50% - ${spacerSize}px)`,*/}
+							{/*			float:"right",*/}
+							{/*			height:0.1575*(availableHeight-74),*/}
+							{/*			padding: 5,*/}
+							{/*			background: "var(--color-bg-2)",*/}
+							{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+							{/*			borderRadius: 8,*/}
+							{/*			flexDirection: "column",*/}
+							{/*			justifyContent: "flex-start",*/}
+							{/*			alignItems: "flex-start",*/}
+							{/*			display: "inline-flex",*/}
+							{/*			minHeight:126*/}
+							{/*		}}>*/}
+							{/*			<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>*/}
+							{/*				<Statistic title={"历史投稿（已结束）"} countUp value={historyDrafts.toString()} prefix={<IconHistory/>} suffix={<Typography.Text type={"secondary"}>已结束播放</Typography.Text>}></Statistic>*/}
+							{/*				<div style={{marginTop: 10}}>*/}
+							{/*					<Link onClick={() => {navigate("/dashboard/history");}}>去历史投稿<IconRightCircle/></Link>*/}
+							{/*				</div>*/}
+							{/*			</div>*/}
+							{/*		</div>*/}
+							{/*	</Col>*/}
+							{/*	:*/}
+							{/*	<Col span={24}>*/}
+							{/*		<Col span={24}  style={{*/}
+							{/*			float:"left",*/}
+							{/*			overflow:"hidden",*/}
+							{/*			height:0.1575*(availableHeight-74),*/}
+							{/*			padding: 5,*/}
+							{/*			background: "var(--color-bg-2)",*/}
+							{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+							{/*			borderRadius: 8,*/}
+							{/*			flexDirection: "column",*/}
+							{/*			justifyContent: "flex-start",*/}
+							{/*			alignItems: "flex-start",*/}
+							{/*			display: "inline-flex",*/}
+							{/*			minHeight:126*/}
+							{/*		}}>*/}
+							{/*			<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>*/}
+							{/*				<Typography.Paragraph style={{margin:0}}>*/}
+							{/*					<Typography.Title  style={{margin: 0}} heading={6}>新增一条投稿</Typography.Title>*/}
+							{/*				</Typography.Paragraph>*/}
+							{/*				<Button type={"primary"} size={"large"} style={{marginTop:8,width:116}} onClick={() => {navigate("/dashboard/submission/create");}}>立即投稿</Button>*/}
+							{/*				<Typography.Text type={"secondary"}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>*/}
+							{/*			</div>*/}
+							{/*		</Col>*/}
+							{/*		<Col span={24} style={{*/}
+							{/*			marginTop:spacerSize,*/}
+							{/*			float:"right",*/}
+							{/*			height:0.1575*(availableHeight-74),*/}
+							{/*			padding: 5,*/}
+							{/*			background: "var(--color-bg-2)",*/}
+							{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+							{/*			borderRadius: 8,*/}
+							{/*			flexDirection: "column",*/}
+							{/*			justifyContent: "flex-start",*/}
+							{/*			alignItems: "flex-start",*/}
+							{/*			display: "inline-flex",*/}
+							{/*			minHeight:126*/}
+							{/*		}}>*/}
+							{/*			<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>*/}
+							{/*				<Statistic title={"历史投稿（已结束）"} countUp value={historyDrafts.toString()} prefix={<IconHistory/>} suffix={<Typography.Text type={"secondary"}>已结束播放</Typography.Text>}></Statistic>*/}
+							{/*				<div style={{marginTop: 10}}>*/}
+							{/*					<Link onClick={() => {navigate("/dashboard/history");}}>去历史投稿<IconRightCircle/></Link>*/}
+							{/*				</div>*/}
+							{/*			</div>*/}
+							{/*		</Col>*/}
+							{/*	</Col>*/}
+							{/*}*/}
 							<Col style={{height:0.36875*(availableHeight-74),
 								marginTop:spacerSize,
 								paddingTop: 21,
@@ -689,115 +735,38 @@ function MainPage()
 								display: "inline-flex",
 								minHeight:(innerWidth >= 768 ? 340 : 350)
 							}}>
-								<div style={{width:"100%", height:"100%", paddingLeft:9, paddingRight:9, overflow:"hidden"}}>
+								<div style={{width:"100%", height:"100%", paddingLeft:9, paddingRight:9, overflow:"hidden",display:"flex",alignContent:"space-between",flexDirection:"column"}}>
 									<div style={{width: 128, height: 24, justifyContent: "flex-start", alignItems: "center", gap: 4, display: "inline-flex"}}>
 										<Typography.Paragraph style={{margin:0}}>
 											<Typography.Title  style={{margin: 0}} heading={6}>当前投稿审核进度</Typography.Title>
 										</Typography.Paragraph>
 									</div>
-									<div style={{marginTop:20,paddingLeft:17,paddingRight:17, flexDirection:(innerWidth > 1200 ? "column" : "row"),justifyContent:"space-between",height:"calc(100% - 80px)"}}>
+									<div style={{marginTop:spacerSize/2,paddingLeft:17,paddingRight:17, flexDirection:(innerWidth > 1200 ? "column" : "row"),justifyContent:"space-between",height:"calc(100% - 80px)"}}>
 										{drafts.data.draftInfoList.length < 1 ?
 											<div>
 												<Empty description={"首次使用？快来投稿吧"}/>
+												{/* 无投稿时的情况	*/}
 											</div>
-											: (innerWidth > 1200  ? drafts.data.draftInfoList.slice(0,3).map((draft:any) => {
-												switch (draft.status){
-												case 2:{return(
-													<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-														<Col flex={"128px"}>
+											:
+											// 有投稿的情况（按屏幕宽度分垂直或水平方向）
+											<Grid cols={{xs:2,sm:3,xl:1}} colGap={35} style={innerWidth >= 1200 ? {height:"100%",display:"flex",alignContent:"space-between",flexDirection:"column",justifyContent:"space-between"} : {}}>
+												{drafts.data.draftInfoList.slice(0,(innerWidth > 576  ? 3 : 2)).map((draft:any) =>
+													<Grid.GridItem key={draft.title} style={{height:(innerWidth >= 1200  ? 50 : 300),display:"flex",flexDirection:(innerWidth >= 1200  ? "row" : "column")}}>
+														<div style={{width:128}}>
 															<Typography.Text ellipsis={{ wrapper: "span" }} >{draft.title}</Typography.Text>
-														</Col>
-														<Col flex={"auto"} style={{minWidth:300}}>
-															<Steps type='dot' status={"error"} current={3} style={{width:"100%",minWidth:300}}>
-																<Step title='上传'/>
+														</div>
+														<div style={(innerWidth >= 1200 ? {width:"calc( 100% - 128px )"} : {minWidth:128})}>
+															<Steps size={"small"} type='dot' status={draft.status === 2 ? "error" : "process"} direction={(innerWidth >= 1200  ? "horizontal" : "vertical")} current={draft.status === 2 || draft.status === 1 ? 3: 2} style={{width:"100%",minWidth:300}}>
+																<Step style={{width:100}} title='上传'/>
 																<Step title='审核中' />
-																<Step title='已驳回'/>
+																<Step title={(draft.status === 2 ? "已驳回" : (draft.status === 1 ? "已通过" : "审核结果"))} />
 															</Steps>
-														</Col>
-													</Row>
-												);}
-												case 1:{return(
-													<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-														<Col flex={"128px"}>
-															<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
-														</Col>
-														<Col flex={"auto"} style={{minWidth:300}}>
-															<Steps type='dot' status={"process"} current={3} style={{width:"100%",minWidth:300}}>
-																<Step title='上传'/>
-																<Step title='审核中' />
-																<Step title='已通过'/>
-															</Steps>
-														</Col>
-													</Row>
-												);}
-												case 0:{return(
-													<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-														<Col flex={"128px"}>
-															<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
-														</Col>
-														<Col flex={"auto"} style={{minWidth:300}}>
-															<Steps type='dot' status={"process"} current={2} style={{width:"100%",minWidth:300}}>
-																<Step title='上传'/>
-																<Step title='审核中' />
-																<Step title='审核结果'/>
-															</Steps>
-														</Col>
-													</Row>
-												);}
-												default:return null;
-												}}) :
-												//宽度不够时
-												<Row justify={"space-between"} align={"start"}>
-													{drafts.data.draftInfoList.slice(0,(innerWidth >= 576 ? 3 : 2)).map((draft:any) => {
-														switch (draft.status){
-														case 2:{return(
-															<Col span={7} style={{}} key={draft.title}>
-																<div style={{}}>
-																	<Typography.Text ellipsis={{ wrapper: "span" }} >{draft.title}</Typography.Text>
-																</div>
-																<Col flex={"auto"} style={{minHeight:248}}>
-																	<Steps type='dot' status={"error"} current={3} direction={"vertical"} style={{width:"100%",minWidth:250, height:"100%"}}>
-																		<Step title='上传'/>
-																		<Step title='审核中' />
-																		<Step title='已驳回'/>
-																	</Steps>
-																</Col>
-															</Col>
-														);}
-														case 1:{return(
-															<Col span={7} style={{}} key={draft.title}>
-																<Col flex={"128px"}>
-																	<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
-																</Col>
-																<Col flex={"auto"} style={{minHeight:300}}>
-																	<Steps type='dot' status={"process"} current={3} direction={"vertical"} style={{width:"100%",minWidth:250}}>
-																		<Step title='上传'/>
-																		<Step title='审核中' />
-																		<Step title='已通过'/>
-																	</Steps>
-																</Col>
-															</Col>
-														);}
-														case 0:{return(
-															<Col span={7} style={{}} key={draft.title}>
-																<Col flex={"128px"}>
-																	<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
-																</Col>
-																<Col flex={"auto"} style={{minHeight:300}}>
-																	<Steps type='dot' status={"process"} current={2} direction={"vertical"} style={{width:"100%",minWidth:250}}>
-																		<Step title='上传'/>
-																		<Step title='审核中' />
-																		<Step title='审核结果'/>
-																	</Steps>
-																</Col>
-															</Col>
-														);}
-														default:return null;
-														}})}
-												</Row>)}
+														</div>
+													</Grid.GridItem>)}
+											</Grid>}
 									</div>
-									<div style={{marginTop: 10}}>
-										<Link onClick={() => {navigate("/dashboard/submission");}}>查看具体<IconRightCircle/></Link>
+									<div style={{flex:1,alignItems:"flex-end",display:"flex"}}>
+										<Link style={{width:100}} onClick={() => {navigate("/dashboard/submission");}}>查看具体<IconRightCircle/></Link>
 									</div>
 								</div>
 							</Col>
@@ -848,9 +817,9 @@ function MainPage()
 					以上为左侧栏，以下为右侧栏
 					*/}
 
-					{innerWidth >= 768 ?
-						<Col md={7} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize} : {paddingLeft:spacerSize}))}>
-							<Col md={24} xs={12} style={{
+					<Col md={7} sm={24} style={{paddingLeft:spacerSize}}>
+						<Grid cols={{xs:2,sm:2,md:1}} colGap={spacerSize} rowGap={16}  style={{width:"100%"}}>
+							<Grid.GridItem style={{
 								float:"left",
 								height:0.35125*(availableHeight-74),
 								paddingTop: 21,
@@ -866,17 +835,16 @@ function MainPage()
 								alignItems: "flex-start",
 								gap: 17,
 								display: "inline-flex",
-								minHeight:281
+								minHeight:243
 							}}>
 								<Typography.Paragraph style={{margin:0}}>
 									<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>
 								</Typography.Paragraph>
-								<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows: 5}}>{displayNotice.content}</Typography.Text>
+								<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows:5}}>{displayNotice.content}</Typography.Text>
 								<Link href={"mailto:subit@i.pkuschool.edu.cn"} style={{flex:1,alignItems:"flex-end",display:"flex"}}>邮件联系我们<IconRightCircle/></Link>
-							</Col>
-							<Col md={24} xs={12}  style={{
+							</Grid.GridItem>
+							<Grid.GridItem style={{
 								float:"right",
-								marginTop:17,
 								paddingTop: 21,
 								paddingBottom: 23,
 								paddingLeft: 12,
@@ -890,6 +858,7 @@ function MainPage()
 								alignItems: "flex-start",
 								gap: 17,
 								display: "inline-flex",
+								minHeight:243
 							}}>
 								<Space  direction={"vertical"} style={{display:"flex",flexDirection:"column", alignItems:"flex-start",height:"100%",justifyContent:"start"}}>
 									<Typography.Paragraph style={{margin:0}}>
@@ -897,59 +866,114 @@ function MainPage()
 									</Typography.Paragraph>
 									{links.map(thisLink => <Link key={thisLink.name} href={thisLink.href} style={{marginTop:5, fontSize: 14, fontFamily: "PingFang SC", fontWeight: "400", wordWrap: "break-word"}} icon>{thisLink.name}</Link>)}
 								</Space >
-							</Col>
-						</Col>
-						:
-						<Col md={7} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize, paddingTop:spacerSize} : {paddingLeft:24}))}>
-							<div style={{
-								width:`calc(50% - ${24 + spacerSize}px)`,
-								paddingTop: 21,
-								paddingBottom: 25,
-								paddingLeft: 12,
-								paddingRight: 14,
-								background: "var(--color-bg-2)",
-								boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
-								borderRadius: 8,
-								overflow: "hidden",
-								flexDirection: "column",
-								justifyContent: "flex-start",
-								alignItems: "flex-start",
-								gap: 17,
-								display: "inline-flex",
-								minHeight:243,
-							}}>
-								<Typography.Paragraph style={{margin:0}}>
-									<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>
-								</Typography.Paragraph>
-								<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows: 5}}>{displayNotice.content}</Typography.Text>
-								<Link href={"mailto:subit@i.pkuschool.edu.cn"} style={{flex:1,alignItems:"flex-end",display:"flex"}}>邮件联系我们<IconRightCircle/></Link>
-							</div>
-							<div  style={{
-								float:"right",
-								width:`calc(50% - ${24 + spacerSize}px)`,
-								minHeight:243,
-								paddingTop: 21,
-								paddingBottom: 23,
-								paddingLeft: 12,
-								paddingRight: 14,
-								background: "var(--color-bg-2)",
-								boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",
-								borderRadius: 8,
-								overflow: "hidden",
-								flexDirection: "column",
-								justifyContent: "flex-start",
-								alignItems: "flex-start",
-								gap: 17,
-								display: "inline-flex"
-							}}>
-								<Space  direction={"vertical"} style={{display:"flex",flexDirection:"column", alignItems:"flex-start",height:"100%",justifyContent:"start"}}>
-									<Typography.Paragraph style={{margin:0}}>
-										<Typography.Title  style={{margin: 0}} heading={6}>常用链接</Typography.Title>
-									</Typography.Paragraph>
-									{links.map(thisLink => <Link key={thisLink.name} href={thisLink.href} style={{marginTop:5, fontSize: 14, fontFamily: "PingFang SC", fontWeight: "400", wordWrap: "break-word"}} icon>{thisLink.name}</Link>)}
-								</Space >
-							</div>
-						</Col>}
+							</Grid.GridItem>
+						</Grid>
+					</Col>
+
+
+					{/* 屎山老版本，暂时先留着，看有没有问题*/}
+					{/*{innerWidth >= 768 ?*/}
+					{/*	<Col md={7} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize} : {paddingLeft:spacerSize}))}>*/}
+					{/*		<Col md={24} xs={12} style={{*/}
+					{/*			float:"left",*/}
+					{/*			height:0.35125*(availableHeight-74),*/}
+					{/*			paddingTop: 21,*/}
+					{/*			paddingBottom: 25,*/}
+					{/*			paddingLeft: 12,*/}
+					{/*			paddingRight: 14,*/}
+					{/*			background: "var(--color-bg-2)",*/}
+					{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+					{/*			borderRadius: 8,*/}
+					{/*			overflow: "hidden",*/}
+					{/*			flexDirection: "column",*/}
+					{/*			justifyContent: "flex-start",*/}
+					{/*			alignItems: "flex-start",*/}
+					{/*			gap: 17,*/}
+					{/*			display: "inline-flex",*/}
+					{/*			minHeight:281*/}
+					{/*		}}>*/}
+					{/*			<Typography.Paragraph style={{margin:0}}>*/}
+					{/*				<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>*/}
+					{/*			</Typography.Paragraph>*/}
+					{/*			<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows: 5}}>{displayNotice.content}</Typography.Text>*/}
+					{/*			<Link href={"mailto:subit@i.pkuschool.edu.cn"} style={{flex:1,alignItems:"flex-end",display:"flex"}}>邮件联系我们<IconRightCircle/></Link>*/}
+					{/*		</Col>*/}
+					{/*		<Col md={24} xs={12}  style={{*/}
+					{/*			float:"right",*/}
+					{/*			marginTop:17,*/}
+					{/*			paddingTop: 21,*/}
+					{/*			paddingBottom: 23,*/}
+					{/*			paddingLeft: 12,*/}
+					{/*			paddingRight: 14,*/}
+					{/*			background: "var(--color-bg-2)",*/}
+					{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+					{/*			borderRadius: 8,*/}
+					{/*			overflow: "hidden",*/}
+					{/*			flexDirection: "column",*/}
+					{/*			justifyContent: "flex-start",*/}
+					{/*			alignItems: "flex-start",*/}
+					{/*			gap: 17,*/}
+					{/*			display: "inline-flex",*/}
+					{/*		}}>*/}
+					{/*			<Space  direction={"vertical"} style={{display:"flex",flexDirection:"column", alignItems:"flex-start",height:"100%",justifyContent:"start"}}>*/}
+					{/*				<Typography.Paragraph style={{margin:0}}>*/}
+					{/*					<Typography.Title  style={{margin: 0}} heading={6}>常用链接</Typography.Title>*/}
+					{/*				</Typography.Paragraph>*/}
+					{/*				{links.map(thisLink => <Link key={thisLink.name} href={thisLink.href} style={{marginTop:5, fontSize: 14, fontFamily: "PingFang SC", fontWeight: "400", wordWrap: "break-word"}} icon>{thisLink.name}</Link>)}*/}
+					{/*			</Space >*/}
+					{/*		</Col>*/}
+					{/*	</Col>*/}
+					{/*	:*/}
+					{/*	<Col md={7} sm={24} style={((innerWidth<768 ? {paddingLeft:spacerSize, paddingRight: spacerSize, paddingTop:spacerSize} : {paddingLeft:24}))}>*/}
+					{/*		<div style={{*/}
+					{/*			width:`calc(50% - ${24 + spacerSize}px)`,*/}
+					{/*			paddingTop: 21,*/}
+					{/*			paddingBottom: 25,*/}
+					{/*			paddingLeft: 12,*/}
+					{/*			paddingRight: 14,*/}
+					{/*			background: "var(--color-bg-2)",*/}
+					{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+					{/*			borderRadius: 8,*/}
+					{/*			overflow: "hidden",*/}
+					{/*			flexDirection: "column",*/}
+					{/*			justifyContent: "flex-start",*/}
+					{/*			alignItems: "flex-start",*/}
+					{/*			gap: 17,*/}
+					{/*			display: "inline-flex",*/}
+					{/*			minHeight:243,*/}
+					{/*		}}>*/}
+					{/*			<Typography.Paragraph style={{margin:0}}>*/}
+					{/*				<Typography.Title  style={{margin: 0}} heading={6}>管理员公告</Typography.Title>*/}
+					{/*			</Typography.Paragraph>*/}
+					{/*			<Typography.Text style={{height:"calc( 100% - 24px)"}} ellipsis={{ rows: 5}}>{displayNotice.content}</Typography.Text>*/}
+					{/*			<Link href={"mailto:subit@i.pkuschool.edu.cn"} style={{flex:1,alignItems:"flex-end",display:"flex"}}>邮件联系我们<IconRightCircle/></Link>*/}
+					{/*		</div>*/}
+					{/*		<div  style={{*/}
+					{/*			float:"right",*/}
+					{/*			width:`calc(50% - ${24 + spacerSize}px)`,*/}
+					{/*			minHeight:243,*/}
+					{/*			paddingTop: 21,*/}
+					{/*			paddingBottom: 23,*/}
+					{/*			paddingLeft: 12,*/}
+					{/*			paddingRight: 14,*/}
+					{/*			background: "var(--color-bg-2)",*/}
+					{/*			boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.10)",*/}
+					{/*			borderRadius: 8,*/}
+					{/*			overflow: "hidden",*/}
+					{/*			flexDirection: "column",*/}
+					{/*			justifyContent: "flex-start",*/}
+					{/*			alignItems: "flex-start",*/}
+					{/*			gap: 17,*/}
+					{/*			display: "inline-flex"*/}
+					{/*		}}>*/}
+					{/*			<Space  direction={"vertical"} style={{display:"flex",flexDirection:"column", alignItems:"flex-start",height:"100%",justifyContent:"start"}}>*/}
+					{/*				<Typography.Paragraph style={{margin:0}}>*/}
+					{/*					<Typography.Title  style={{margin: 0}} heading={6}>常用链接</Typography.Title>*/}
+					{/*				</Typography.Paragraph>*/}
+					{/*				{links.map(thisLink => <Link key={thisLink.name} href={thisLink.href} style={{marginTop:5, fontSize: 14, fontFamily: "PingFang SC", fontWeight: "400", wordWrap: "break-word"}} icon>{thisLink.name}</Link>)}*/}
+					{/*			</Space >*/}
+					{/*		</div>*/}
+					{/*	</Col>}*/}
 				</Row>
 			</Content>
 			<Footer>

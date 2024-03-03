@@ -10,11 +10,12 @@ import {
 	Breadcrumb,
 	Grid,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	Link, Typography, Dropdown, Steps, Message, Radio
+	Link, Typography, Dropdown, Steps, Message, Radio, Tag,
 } from "@arco-design/web-react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
 	IconDown, IconHome, IconPlus, IconQuestionCircle,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	IconRightCircle,
 } from "@arco-design/web-react/icon";
 import "@arco-design/web-react";
@@ -146,57 +147,6 @@ const refreshUserDrafts = async () => {
 					"sourceId": 1,
 					"createTime": new Date().getTime(),
 					"auditTime": 1701402847317
-				},
-				{
-					"draftId": "2378b1d5-88e9-49e2-b6eb-bb055671ad77",
-					"title": "test4",
-					"content": null,
-					"description": "test",
-					"startDate": 1701402857000,
-					"endDate": 1701403847000,
-					"permittedBegin": 1701402857000,
-					"permittedEnd": 1701403847000,
-					"status": -1,
-					"suggestion": "111",
-					"screenId": "default",
-					"filesName": [],
-					"sourceId": 1,
-					"createTime": new Date().getTime(),
-					"auditTime": 1701402847823
-				},
-				{
-					"draftId": "32585e72-935e-46f1-8cfe-8cd8b9e5fe74",
-					"title": "test5",
-					"content": null,
-					"description": "test",
-					"startDate": 1701402857000,
-					"endDate": 1701403847000,
-					"permittedBegin": 1701402857000,
-					"permittedEnd": 1701403847000,
-					"status": 1,
-					"suggestion": "111",
-					"screenId": "default",
-					"filesName": [],
-					"sourceId": 1,
-					"createTime": new Date().getTime(),
-					"auditTime": 1701402847566
-				},
-				{
-					"draftId": "992c3fb6-9ac5-4e20-b5f0-31072a243312",
-					"title": "test6",
-					"content": null,
-					"description": "test",
-					"startDate": 1701402901000,
-					"endDate": 1701403891000,
-					"permittedBegin": 1701402901000,
-					"permittedEnd": 1701403891000,
-					"status": 1,
-					"suggestion": "111",
-					"screenId": "default",
-					"filesName": [],
-					"sourceId": 1,
-					"createTime": new Date().getTime(),
-					"auditTime": 1701402892176
 				}
 			]
 		},
@@ -205,7 +155,7 @@ const refreshUserDrafts = async () => {
 
 };
 
-const handleErrors = async () => {
+const dataRequest = async () => {
 	try {
 		await getUserInfo();
 		await refreshUserDrafts();
@@ -220,7 +170,7 @@ const handleErrors = async () => {
 };
 
 // 调用函数
-handleErrors();
+dataRequest();
 
 userInfo = {
 	"code": 10000,
@@ -244,8 +194,15 @@ function Submission()
 	const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
 
+	//修改status过滤器
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [filter, setFilter] = useState("1");
+	const [filter, setFilter] = useState("0");
+
+	const refreshFilter = (filter:string) => {
+		setFilter(filter);
+		console.log(filter);
+	};
+
 
 
 	useEffect(() => {
@@ -254,6 +211,8 @@ function Submission()
 			setInnerWidth(window.innerWidth);
 			setSpacerSize((window.innerWidth < 768 ? 12 : 24));
 		};
+
+		handleResize();
 
 		// 在组件挂载时添加窗口大小改变事件监听器
 		window.addEventListener("resize", handleResize);
@@ -281,11 +240,12 @@ function Submission()
 		<Layout>
 			<Header style={{height:109/800*(availableHeight-74),width:"100%",minHeight:109}}>
 				<Row style={{height:"100%",display:"flex",flexDirection:"row",overflow:"hidden"}} justify={"space-between"}>
-					<Col flex={`${(innerWidth<768 ? innerWidth - 200 : 300)}px`} style={{height:"100%",display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
+
+					<Col  span={12} style={{height:"100%",minWidth:225,display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
 						<Breadcrumb style={{paddingLeft:spacerSize}}>
 							{breadCrumbs.map((item:any) => <BreadcrumbItem key={item.content} onClick={() => {navigate(item.navigate);}}>{item.icon}{item.content}</BreadcrumbItem>)}
 						</Breadcrumb>
-						<Radio.Group defaultValue={"1"} type={"button"} size={"large"} onChange={(value: any) => setFilter(value)}
+						<Radio.Group value={filter} type={"button"} size={"large"} onChange={(value: any) => refreshFilter(value)}
 							style={{paddingLeft:spacerSize,paddingTop:spacerSize/2,paddingBottom:5}}>
 							<Radio value='0'>审核中</Radio>
 							<Radio value='1'>已通过</Radio>
@@ -303,7 +263,7 @@ function Submission()
 				</Row>
 			</Header>
 			<Content style={{width:"100%"}}>
-				<Row justify={"start"} align={"start"} style={{paddingRight:spacerSize,paddingLeft:spacerSize}}>
+				<Row justify={"start"} align={"start"} style={{paddingRight:spacerSize,paddingLeft:spacerSize,marginTop:5}}>
 					<Col xs={24} md={18} style={{
 						minWidth:(innerWidth >= 768 ? 462 : 0),
 						paddingTop: 21,
@@ -334,7 +294,7 @@ function Submission()
 								justifyContent: "flex-start",
 								alignItems: "flex-start",
 								display: "inline-flex",
-								height:Math.max(126, 126/ 800*(availableHeight-74))
+								height:126/ 800*(availableHeight-74)
 							}}>
 								<div style={{width:"100%",padding:16,display:"flex",flexDirection:"column",height:"100%",justifyContent:"space-between"}}>
 									<Typography.Paragraph style={{margin:0}}>
@@ -343,9 +303,6 @@ function Submission()
 									<Button type={"primary"} size={"large"} style={{width:116, height:36}} onClick={() => {navigate("/dashboard/submission/create");}}><IconPlus/>立即投稿</Button>
 									<Typography.Text type={"secondary"}>投稿即遵循《SubIT大屏使用协议》</Typography.Text>
 								</div>
-							</div>
-							<div style={{height:24,marginTop:10}}>
-								<Link onClick={() => {navigate("/dashboard/history");}}>查看历史<IconRightCircle/></Link>
 							</div>
 						</div>
 					</Col>

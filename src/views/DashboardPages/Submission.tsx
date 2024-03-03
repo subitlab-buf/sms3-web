@@ -91,7 +91,7 @@ const getUserDrafts = async () => {
 	}
 };
 
-const handleErrors = async () => {
+const dataRequest = async () => {
 	try {
 		await getUserInfo();
 		await getUserDrafts();
@@ -106,7 +106,7 @@ const handleErrors = async () => {
 };
 
 // 调用函数
-handleErrors();
+dataRequest();
 
 userInfo = {
 	"code": 10000,
@@ -284,7 +284,7 @@ function Submission()
 		<Layout>
 			<Header style={{height:109/800*(availableHeight-74),width:"100%",minHeight:109}}>
 				<Row style={{height:"100%",display:"flex",flexDirection:"row",overflow:"hidden"}} justify={"space-between"}>
-					<Col flex={`${(innerWidth<768 ? innerWidth - 200 : 300)}px`} style={{height:"100%",display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
+					<Col  span={12} style={{height:"100%",minWidth:225,display:"flex", flexDirection:"column", justifyContent:"end", alignItems:"start"}}>
 						<Breadcrumb style={{paddingLeft:spacerSize,paddingBottom:spacerSize}}>
 							{breadCrumbs.map((item:any) => <BreadcrumbItem key={item.content} onClick={() => {navigate(item.navigate);}}>{item.icon}{item.content}</BreadcrumbItem>)}
 						</Breadcrumb>
@@ -302,7 +302,7 @@ function Submission()
 			<Content style={{width:"100%"}}>
 				<Row justify={"start"} align={"start"} style={{paddingRight:spacerSize,paddingLeft:spacerSize}}>
 					<Col xs={24} md={18} style={{
-						minHeight:Math.max(242,242 / 800*(availableHeight-74)),
+						minHeight:242 / 800*(availableHeight-74),
 						minWidth:(innerWidth >= 768 ? 462 : 0),
 						paddingTop: 21,
 						paddingBottom: 21,
@@ -320,113 +320,22 @@ function Submission()
 								<Typography.Title style={{margin: 0}} heading={6}>7天内{tempLst.length < 0 ? "没有投稿" : `有投稿${tempLst.filter((draft:any) => {if(draft.createTime >=  Math.floor(Date.now() - 7 * 24 * 60 * 60 * 1000)){
 									return(draft);}}).length}个`}</Typography.Title>
 							</Typography.Paragraph>
-							<div style={{marginTop:30,paddingLeft:17, paddingRight:17,width:"calc( 493/767 * 100%)"}}>
-								{tempLst.length > 0  &&
-									(innerWidth > 1200  ? tempLst.map((draft:any) => {
-										// @ts-ignore
-										console.log(draft);
-										switch (draft.status){
-										case 2:{
-											return(// @ts-ignore
-												<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-													<Col flex={"128px"}>
-														<Typography.Text ellipsis={{ wrapper: "span" }} >{// @ts-ignore
-															draft.title}</Typography.Text>
-													</Col>
-													<Col flex={"auto"} style={{minWidth:300}}>
-														<Steps type='dot' status={"error"} current={3} style={{width:"100%",minWidth:300}}>
-															<Step title='上传'/>
-															<Step title='审核中' />
-															<Step title='已驳回'/>
-														</Steps>
-													</Col>
-												</Row>
-											);}
-										case 1:{return(// @ts-ignore
-											<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-												<Col flex={"128px"}>
-													<Typography.Text ellipsis={{ wrapper: "span" }}>{// @ts-ignore
-														draft.title}</Typography.Text>
-												</Col>
-												<Col flex={"auto"} style={{minWidth:300}}>
-													<Steps type='dot' status={"process"} current={3} style={{width:"100%",minWidth:300}}>
-														<Step title='上传'/>
-														<Step title='审核中' />
-														<Step title='已通过'/>
-													</Steps>
-												</Col>
-											</Row>
-										);}
-										case 0:{return(// @ts-ignore
-											<Row style={{marginBottom: 35 }} key={draft.title} align={"end"	}>
-												<Col flex={"128px"}>
-													<Typography.Text ellipsis={{ wrapper: "span" }}>{// @ts-ignore
-														draft.title}</Typography.Text>
-												</Col>
-												<Col flex={"auto"} style={{minWidth:300}}>
-													<Steps type='dot' status={"process"} current={2} style={{width:"100%",minWidth:300}}>
-														<Step title='上传'/>
-														<Step title='审核中' />
-														<Step title='审核结果'/>
-													</Steps>
-												</Col>
-											</Row>
-										);}
-										default:{
-											return null;
-										}
-										}}) :
-										//宽度不够时
-										<Row justify={"space-between"} align={"start"}>
-											{tempLst.map((draft:any) => {
-												switch (draft.status){
-												case 2:{return(
-													<Col span={(innerWidth >= 576 ? 7 : 12)} style={{}} key={draft.title}>
-														<div style={{}}>
-															<Typography.Text ellipsis={{ wrapper: "span" }} >{draft.title}</Typography.Text>
-														</div>
-														<Col flex={"auto"} style={{minHeight:248}}>
-															<Steps type='dot' status={"error"} current={3} direction={"vertical"} style={{width:"100%",minWidth:250, height:"100%"}}>
-																<Step title='上传'/>
-																<Step title='审核中' />
-																<Step title='已驳回'/>
-															</Steps>
-														</Col>
-													</Col>
-												);}
-												case 1:{return(
-													<Col span={(innerWidth >= 576 ? 7 : 12)} style={{}} key={draft.title}>
-														<Col flex={"128px"}>
-															<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
-														</Col>
-														<Col flex={"auto"} style={{minHeight:300}}>
-															<Steps type='dot' status={"process"} current={3} direction={"vertical"} style={{width:"100%",minWidth:250}}>
-																<Step title='上传'/>
-																<Step title='审核中' />
-																<Step title='已通过'/>
-															</Steps>
-														</Col>
-													</Col>
-												);}
-												case 0:{return(
-													<Col span={(innerWidth >= 576 ? 7 : 12)} style={{}} key={draft.title}>
-														<Col flex={"128px"}>
-															<Typography.Text ellipsis={{ wrapper: "span" }}>{draft.title}</Typography.Text>
-														</Col>
-														<Col flex={"auto"} style={{minHeight:300}}>
-															<Steps type='dot' status={"process"} current={2} direction={"vertical"} style={{width:"100%",minWidth:250}}>
-																<Step title='上传'/>
-																<Step title='审核中' />
-																<Step title='审核结果'/>
-															</Steps>
-														</Col>
-													</Col>
-												);}
-												default:{
-													return null;
-												}
-												}})}
-										</Row>)}
+							<div style={{marginTop:30,paddingLeft:17, paddingRight:17,width:(innerWidth <= 948 ? "100%" : "calc( 493/767 * 100%)")}}>
+								<Grid cols={{xs:2,sm:3,xl:1}} colGap={35} >
+									{drafts.data.draftInfoList.map((draft:any) =>
+										<Grid.GridItem key={draft.title} style={{height:(innerWidth >= 1200  ? 75 : 300),display:"flex",flexDirection:(innerWidth >= 1200  ? "row" : "column")}}>
+											<div style={{width:128}}>
+												<Typography.Text ellipsis={{ wrapper: "span" }} >{draft.title}</Typography.Text>
+											</div>
+											<div style={(innerWidth >= 1200 ? {width:"calc( 100% - 128px )"} : {minWidth:128})}>
+												<Steps size={"small"} type='dot' status={draft.status === 2 ? "error" : "process"} direction={(innerWidth >= 1200  ? "horizontal" : "vertical")} current={draft.status === 2 || draft.status === 1 ? 3: 2} style={{width:"100%",minWidth:300}}>
+													<Step style={{width:100}} title='上传'/>
+													<Step title='审核中' />
+													<Step title={(draft.status === 2 ? "已驳回" : (draft.status === 1 ? "已通过" : "审核结果"))} />
+												</Steps>
+											</div>
+										</Grid.GridItem>)}
+								</Grid>
 							</div>
 							<div  style={{
 								width:"calc( 316/767 * 100%)",
